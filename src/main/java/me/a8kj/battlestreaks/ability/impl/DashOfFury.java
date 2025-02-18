@@ -3,6 +3,7 @@ package me.a8kj.battlestreaks.ability.impl;
 import org.bukkit.entity.Player;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
 public class DashOfFury extends AbilityBase {
     public DashOfFury() {
@@ -39,5 +40,10 @@ public class DashOfFury extends AbilityBase {
     @Override
     public String getDescription() {
         return "Dash forward every 30 seconds, giving you a burst of speed.";
+    }
+
+    @Override
+    public CooldownTime getCooldownTime() {
+        return new CooldownTime(0,30);
     }
 }

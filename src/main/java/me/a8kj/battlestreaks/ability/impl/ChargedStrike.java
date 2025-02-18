@@ -3,6 +3,7 @@ package me.a8kj.battlestreaks.ability.impl;
 import org.bukkit.entity.Player;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
 public class ChargedStrike extends AbilityBase {
     public ChargedStrike() {
@@ -39,5 +40,10 @@ public class ChargedStrike extends AbilityBase {
     @Override
     public String getDescription() {
         return "Perform a charged attack every 30 seconds, increasing your damage output.";
+    }
+
+    @Override
+    public CooldownTime getCooldownTime() {
+        return new CooldownTime(0, 30);
     }
 }

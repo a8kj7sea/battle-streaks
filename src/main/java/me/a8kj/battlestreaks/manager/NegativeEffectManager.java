@@ -27,6 +27,10 @@ public class NegativeEffectManager {
         }
     }
 
+    public static boolean contains(Player player) {
+        return players.containsKey(player.getUniqueId());
+    }
+
     public static void removePlayer(Player player) {
         players.remove(player.getUniqueId());
     }
@@ -45,6 +49,10 @@ public class NegativeEffectManager {
 
     public static NegativeEffect getNegativeEffect(String name) {
         return effectMap.get(name.toLowerCase());
+    }
+
+    public static NegativeEffect getNegativeEffectForPlayer(Player player) {
+        return players.get(player.getUniqueId());
     }
 
     public static void clear() {

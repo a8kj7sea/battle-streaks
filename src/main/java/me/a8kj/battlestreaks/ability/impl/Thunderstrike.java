@@ -6,6 +6,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
 public class Thunderstrike extends AbilityBase {
     public Thunderstrike() {
@@ -50,5 +51,10 @@ public class Thunderstrike extends AbilityBase {
     @Override
     public String getDescription() {
         return "Summon a powerful lightning strike to deal damage and stun enemies in a 20-block radius.";
+    }
+
+    @Override
+    public CooldownTime getCooldownTime() {
+        return new CooldownTime(0, 200);
     }
 }

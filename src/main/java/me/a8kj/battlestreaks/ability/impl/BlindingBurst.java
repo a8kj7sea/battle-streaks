@@ -6,6 +6,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
 public class BlindingBurst extends AbilityBase {
     public BlindingBurst() {
@@ -48,5 +49,10 @@ public class BlindingBurst extends AbilityBase {
     @Override
     public String getDescription() {
         return "Unleash an AoE explosion that blinds all nearby enemies every 60 seconds.";
+    }
+
+    @Override
+    public CooldownTime getCooldownTime() {
+        return new CooldownTime(1, 0);
     }
 }

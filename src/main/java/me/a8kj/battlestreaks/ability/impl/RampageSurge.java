@@ -5,6 +5,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
 public class RampageSurge extends AbilityBase {
     public RampageSurge() {
@@ -43,5 +44,10 @@ public class RampageSurge extends AbilityBase {
     @Override
     public String getDescription() {
         return "Boost your strength and speed while healing 3 hearts instantly, every 10 seconds.";
+    }
+
+    @Override
+    public CooldownTime getCooldownTime() {
+        return new CooldownTime(0, 10);
     }
 }

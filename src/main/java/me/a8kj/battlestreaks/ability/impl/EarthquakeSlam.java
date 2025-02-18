@@ -6,6 +6,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
 public class EarthquakeSlam extends AbilityBase {
     public EarthquakeSlam() {
@@ -50,5 +51,10 @@ public class EarthquakeSlam extends AbilityBase {
     @Override
     public String getDescription() {
         return "Strike the ground to cause a shockwave that stuns and damages all nearby enemies.";
+    }
+
+    @Override
+    public CooldownTime getCooldownTime() {
+        return new CooldownTime(1, 10);
     }
 }
