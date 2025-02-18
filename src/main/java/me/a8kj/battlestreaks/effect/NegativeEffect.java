@@ -4,4 +4,8 @@ import org.bukkit.entity.Player;
 
 public interface NegativeEffect {
     void apply(Player player);
+
+    String getName();
+
+    int getRequiredLives();
 }

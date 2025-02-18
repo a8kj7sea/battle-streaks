@@ -1,0 +1,10 @@
+default-data:
+  lives: 5
+  streaks: 0
+  kill_marks: 0
+  ability: "NONE"
+
+
+lives-system: 
+  on-1:
+    effect: 

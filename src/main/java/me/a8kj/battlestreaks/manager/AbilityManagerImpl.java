@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
-@Deprecated(forRemoval = true)
 public class AbilityManagerImpl implements AbilityManager {
     private Map<String, AbilityBase> abilities = new HashMap<>();
 
@@ -38,6 +37,14 @@ public class AbilityManagerImpl implements AbilityManager {
         for (AbilityBase ability : abilities.values()) {
             ability.update(player);
         }
+    }
+
+    @Override
+    public AbilityBase getAbility(String name) {
+        if (!abilities.containsKey(name.toLowerCase()))
+            return null;
+        else
+            return abilities.get(name.toLowerCase());
     }
 
     @Override

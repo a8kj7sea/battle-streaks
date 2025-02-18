@@ -6,9 +6,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import me.a8kj.battlestreaks.ability.AbilityManager;
+import me.a8kj.battlestreaks.ability.impl.BlindingBurst;
+import me.a8kj.battlestreaks.ability.impl.ChargedStrike;
+import me.a8kj.battlestreaks.ability.impl.DashOfFury;
+import me.a8kj.battlestreaks.ability.impl.EarthquakeSlam;
+import me.a8kj.battlestreaks.ability.impl.RampageSurge;
+import me.a8kj.battlestreaks.ability.impl.Thunderstrike;
 import me.a8kj.battlestreaks.configuration.Configuration;
 import me.a8kj.battlestreaks.configuration.impl.DataConfig;
 import me.a8kj.battlestreaks.configuration.impl.DefaultConfig;
+import me.a8kj.battlestreaks.manager.AbilityManagerImpl;
 import me.a8kj.battlestreaks.manager.PlayerAbilityManagerImpl;
 import me.a8kj.battlestreaks.player.PlayerAbilityManager;
 import me.a8kj.battlestreaks.recipe.crafts.CraftKillMarkListener;
@@ -24,8 +32,8 @@ public class PluginFacade {
     private final Logger logger;
     private final JavaPlugin plugin;
 
-    private final PlayerAbilityManager playerAbilityManager = new PlayerAbilityManagerImpl();
-
+    private PlayerAbilityManager playerAbilityManager;
+    private final AbilityManager abilityManager = new AbilityManagerImpl();
     private Configuration defaultConfiguration;
     private Configuration dataConfiguration;
 
@@ -39,6 +47,17 @@ public class PluginFacade {
         registerCraftRecipeListeners();
         registerListeners();
         registerCommands();
+        registerAbilities();
+        playerAbilityManager = new PlayerAbilityManagerImpl(abilityManager);
+    }
+
+    private void registerAbilities() {
+        this.abilityManager.registerAbility(new BlindingBurst());
+        this.abilityManager.registerAbility(new ChargedStrike());
+        this.abilityManager.registerAbility(new DashOfFury());
+        this.abilityManager.registerAbility(new EarthquakeSlam());
+        this.abilityManager.registerAbility(new RampageSurge());
+        this.abilityManager.registerAbility(new Thunderstrike());
     }
 
     public void onStop() {

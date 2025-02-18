@@ -1,0 +1,5 @@
+name: StreakBattles
+main: me.a8kj.battlestreaks.plugin.BattleStreaksPlugin
+author: a8kj7sea
+api: "1.21.1"
+version: "0.3"

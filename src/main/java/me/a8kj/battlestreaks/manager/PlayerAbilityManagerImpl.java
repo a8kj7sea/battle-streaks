@@ -1,32 +1,30 @@
 package me.a8kj.battlestreaks.manager;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.ability.AbilityManager;
 import me.a8kj.battlestreaks.player.PlayerAbilityManager;
-
 import org.bukkit.entity.Player;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
-    private Map<UUID, Map<String, AbilityBase>> playerAbilities = new HashMap<>(); // Player ID to abilities map
+    private final AbilityManager abilityManager;
+    private final Map<UUID, Set<String>> playerAbilities = new HashMap<>(); // Player UUID to ability names
+
+    public PlayerAbilityManagerImpl(AbilityManager abilityManager) {
+        this.abilityManager = abilityManager;
+    }
 
     @Override
     public void registerAbility(Player player, AbilityBase ability) {
-        UUID playerId = player.getUniqueId();
-        playerAbilities.putIfAbsent(playerId, new HashMap<>());
-        playerAbilities.get(playerId).put(ability.getName(), ability);
+        abilityManager.registerAbility(ability);
+        playerAbilities.putIfAbsent(player.getUniqueId(), new HashSet<>());
+        playerAbilities.get(player.getUniqueId()).add(ability.getName());
     }
 
     @Override
     public void activateAbility(Player player, String abilityName) {
-        UUID playerId = player.getUniqueId();
-        Map<String, AbilityBase> abilities = playerAbilities.get(playerId);
-
-        if (abilities != null && abilities.containsKey(abilityName)) {
-            AbilityBase ability = abilities.get(abilityName);
+        AbilityBase ability = abilityManager.getAbility(abilityName);
+        if (ability != null && playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName)) {
             ability.activate(player);
         } else {
             player.sendMessage("You don't have this ability.");
@@ -35,11 +33,8 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
 
     @Override
     public void deactivateAbility(Player player, String abilityName) {
-        UUID playerId = player.getUniqueId();
-        Map<String, AbilityBase> abilities = playerAbilities.get(playerId);
-
-        if (abilities != null && abilities.containsKey(abilityName)) {
-            AbilityBase ability = abilities.get(abilityName);
+        AbilityBase ability = abilityManager.getAbility(abilityName);
+        if (ability != null && playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName)) {
             ability.deactivate(player);
         } else {
             player.sendMessage("You don't have this ability.");
@@ -48,11 +43,10 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
 
     @Override
     public void updateAbilities(Player player) {
-        UUID playerId = player.getUniqueId();
-        Map<String, AbilityBase> abilities = playerAbilities.get(playerId);
-
-        if (abilities != null) {
-            for (AbilityBase ability : abilities.values()) {
+        Set<String> abilities = playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet());
+        for (String abilityName : abilities) {
+            AbilityBase ability = abilityManager.getAbility(abilityName);
+            if (ability != null) {
                 ability.update(player);
             }
         }
@@ -60,40 +54,27 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
 
     @Override
     public List<String> getAllAbilities(Player player) {
-        UUID playerId = player.getUniqueId();
-        Map<String, AbilityBase> abilities = playerAbilities.get(playerId);
-
-        if (abilities != null) {
-            return new ArrayList<>(abilities.keySet());
-        }
-        return new ArrayList<>();
+        return new ArrayList<>(playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()));
     }
 
     @Override
     public boolean hasAbility(Player player, String abilityName) {
-        UUID playerId = player.getUniqueId();
-        Map<String, AbilityBase> abilities = playerAbilities.get(playerId);
-        return abilities != null && abilities.containsKey(abilityName);
+        return playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName);
     }
 
     @Override
     public void replaceAbility(Player player, AbilityBase newAbility) {
-        UUID playerId = player.getUniqueId();
-        Map<String, AbilityBase> abilities = playerAbilities.get(playerId);
-
+        Set<String> abilities = playerAbilities.get(player.getUniqueId());
         if (abilities != null) {
-            // Check if player already has the ability
-            if (abilities.containsKey(newAbility.getName())) {
-                // Deactivate the old ability
-                abilities.get(newAbility.getName()).deactivate(player);
-
-                // Remove the old ability
+            if (abilities.contains(newAbility.getName())) {
+                AbilityBase oldAbility = abilityManager.getAbility(newAbility.getName());
+                if (oldAbility != null) {
+                    oldAbility.deactivate(player);
+                }
                 abilities.remove(newAbility.getName());
             }
-
-            // Register the new ability (it may replace the old one)
-            abilities.put(newAbility.getName(), newAbility);
-
+            abilities.add(newAbility.getName());
+            abilityManager.registerAbility(newAbility);
         } else {
             player.sendMessage("You don't have any abilities to replace.");
         }

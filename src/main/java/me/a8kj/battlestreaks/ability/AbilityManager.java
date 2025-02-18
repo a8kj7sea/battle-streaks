@@ -12,5 +12,7 @@ public interface AbilityManager {
 
     void updateAbilities(Player player);
 
+    AbilityBase getAbility(String name);
+
     List<String> getAllAbilities();
 }
