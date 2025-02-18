@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+@Deprecated(forRemoval = true)
 public class AbilityManagerImpl implements AbilityManager {
     private Map<String, AbilityBase> abilities = new HashMap<>();
 

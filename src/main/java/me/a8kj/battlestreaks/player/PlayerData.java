@@ -10,9 +10,13 @@ public interface PlayerData {
 
     void setData(Player player, PlayerDataType playerDataType, int amount);
 
+    void setData(Player player, PlayerDataType playerDataType, String value);
+
     boolean contains(Player player);
 
     int getData(Player player, PlayerDataType playerDataType, int callBack);
+
+    String getData(Player player, PlayerDataType playerDataType, String callBack);
 
     default void addData(Player player, PlayerDataType playerDataType, int toAdd) {
         if (playerDataType == null) {
@@ -21,6 +25,8 @@ public interface PlayerData {
 
         this.setData(player, playerDataType, getData(player, playerDataType, 0) + abs(toAdd));
     }
+
+    boolean hasAbility(Player player);
 
     default void removeData(Player player, PlayerDataType playerDataType, int toRemove) {
         if (playerDataType == null) {

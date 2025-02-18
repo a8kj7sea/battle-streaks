@@ -6,8 +6,8 @@ import org.bukkit.event.Listener;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import me.a8kj.battlestreaks.ability.AbilityManager;
 import me.a8kj.battlestreaks.configuration.impl.DefaultConfig;
+import me.a8kj.battlestreaks.player.PlayerAbilityManager;
 import me.a8kj.battlestreaks.player.PlayerData;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 
@@ -29,7 +29,7 @@ public class PluginListener implements Listener {
         return (DefaultConfig) this.pluginFacade.getDefaultConfiguration();
     }
 
-    public AbilityManager getAbilityManager() {
-        return this.pluginFacade.getAbilityManager();
+    public PlayerAbilityManager getPlayerAbilityManager() {
+        return this.pluginFacade.getPlayerAbilityManager();
     }
 }

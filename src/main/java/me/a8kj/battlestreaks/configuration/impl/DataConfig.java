@@ -31,8 +31,30 @@ public class DataConfig extends Configuration implements PlayerData {
     }
 
     @Override
+    public String getData(Player player, PlayerDataType playerDataType, String callBack) {
+        if (!contains(player)) {
+            return callBack;
+        }
+
+        return this.configurationFile
+                .getString("players-data." + player.getName() + "." + playerDataType.name().toLowerCase(), callBack);
+    }
+
+    @Override
     public boolean contains(Player player) {
         return this.configurationFile.contains("players-data." + player.getName());
+    }
+
+    @Override
+    public void setData(Player player, PlayerDataType playerDataType, String value) {
+        this.configurationFile.set("players-data." + player.getName() + "." + playerDataType.name().toLowerCase(),
+                value.toLowerCase());
+        this.save();
+    }
+
+    @Override
+    public boolean hasAbility(Player player) {
+        return getData(player, PlayerDataType.ABILITY, "NONE") != "NONE";
     }
 
 }
