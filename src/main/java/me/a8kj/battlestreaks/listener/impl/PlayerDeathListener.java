@@ -1,5 +1,6 @@
 package me.a8kj.battlestreaks.listener.impl;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -13,6 +14,7 @@ import me.a8kj.battlestreaks.api.player.impl.PlayerLivesEvent.LivesStatus;
 import me.a8kj.battlestreaks.listener.PluginListener;
 import me.a8kj.battlestreaks.player.properties.PlayerDataType;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
+import me.a8kj.battlestreaks.util.ItemStackBuilder;
 
 public class PlayerDeathListener extends PluginListener {
 
@@ -45,19 +47,36 @@ public class PlayerDeathListener extends PluginListener {
             new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
 
             if (killerStreaks + 1 <= 4) {
-                victim.getWorld().dropItemNaturally(victim.getEyeLocation(), null);
+                victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
+                        new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
+                                .setAmount(1)
+                                .setDisplayName("&4Kill Mark")
+                                .setLore("&7A mark of death, infused",
+                                        "&7with dark energy.",
+                                        "&cCannot be used while",
+                                        "&cyou are in the lives system!")
+                                .build());
             }
             if ((killerStreaks + 1) % 4 == 0) {
                 int toDrop = killerStreaks / 4;
-                victim.getWorld().dropItemNaturally(victim.getEyeLocation(), null);
+                victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
+                        new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
+                                .setAmount(toDrop)
+                                .setDisplayName("&4Kill Mark")
+                                .setLore("&7A mark of death, infused",
+                                        "&7with dark energy.",
+                                        "&cCannot be used while",
+                                        "&cyou are in the lives system!")
+                                .build());
             }
         }
 
         // if vicitm streaks - 1 = 0 then enter him to lives mode and call event to
         // disable abilites and remove them and remove poitions
-        if (victimStreaks - 1 == 0) {
+        if (victimStreaks - 1 <= 0) {
             new PlayerActionBar(getMessage("enter-livesmode")).execute(victim);
             this.getPluginFacade().addPlayerToLivesMode(victim);
+            setData(victim, PlayerDataType.STREAKS, -1);
             new PlayerLivesEvent(killer, 5, null).callEvent();
         }
 
@@ -77,6 +96,7 @@ public class PlayerDeathListener extends PluginListener {
             if (killerLives + 1 > 5) {
                 getPluginFacade().removePlayerFromLivesMode(killer);
                 removePlayerEffects(killer);
+                setData(victim, PlayerDataType.STREAKS, 0);
                 new PlayerActionBar(getMessage("leave-livesmode")).execute(victim);
                 setData(killer, PlayerDataType.LIVES, 5);
             }

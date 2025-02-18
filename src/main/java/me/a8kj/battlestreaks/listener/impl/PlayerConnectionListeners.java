@@ -41,6 +41,8 @@ public class PlayerConnectionListeners extends PluginListener {
                 if (getDataConfig().getData(event.getPlayer(), PlayerDataType.LIVES, 4) <= 4) {
                     // Ensure this logic is correct to manage players in lives mode
                     PluginFacade.getPlayersInLivesMode().add(event.getPlayer().getUniqueId());
+
+                    
                 }
             }
         });

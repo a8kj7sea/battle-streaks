@@ -9,9 +9,6 @@ default-data:
   kill_marks: 0 # Kill markers (used for tracking progress)
   ability: "NONE" # Default ability (NONE means no ability assigned)
 
-# if player has get the required give it as item not only level
-give-kills-mark-as-item: false
-
 # ==============================================
 # 🎯 Ability Unlock System - Based on Kill Streaks
 # ==============================================

@@ -119,7 +119,13 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
     @Override
     public void removeAbility(Player player) {
         if (hasAbility(player)) {
+
+            for (String s : this.getAllAbilities(player)) {
+                deactivateAbility(player, s);
+            }
+
             playerAbilities.remove(player.getUniqueId());
+
         }
     }
 
