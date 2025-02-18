@@ -35,7 +35,7 @@ public abstract class CustomInteractListener extends PluginListener {
                 return;
 
             execute(event, player);
-
+            event.setCancelled(true);
         }
 
     }
