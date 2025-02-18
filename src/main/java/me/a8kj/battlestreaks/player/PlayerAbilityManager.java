@@ -13,6 +13,8 @@ public interface PlayerAbilityManager {
 
     void updateAbilities(Player player);
 
+    boolean hasAbility(Player player);
+
     List<String> getAllAbilities(Player player);
 
     boolean hasAbility(Player player, String abilityName);
@@ -20,4 +22,6 @@ public interface PlayerAbilityManager {
     void replaceAbility(Player player, AbilityBase newAbility);
 
     void replaceAbility(Player player, String newAbility);
+
+    void removeAbility(Player player);
 }

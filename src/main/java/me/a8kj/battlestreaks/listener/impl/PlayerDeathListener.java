@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 import lombok.NonNull;
+import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
 import me.a8kj.battlestreaks.api.player.impl.PlayerKillStreakEvent;
 import me.a8kj.battlestreaks.api.player.impl.PlayerLivesEvent;
 import me.a8kj.battlestreaks.api.player.impl.PlayerKillStreakEvent.KillStreakStatus;
@@ -30,47 +31,60 @@ public class PlayerDeathListener extends PluginListener {
         final int victimStreaks = getStreaks(victim);
         final int victimLives = getLives(victim);
 
-        // Handle the victim's death
-        if (victimStreaks > 0) {
-            // Calculate kill marks to leave behind
-            int killMarks = victimStreaks / 4;
-            if (victimStreaks < 4) {
-                killMarks = 1;
-            }
-
-            // Decrease the victim's streak
-            new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
-            removeData(victim, PlayerDataType.STREAKS, 1);
-
-            // Add kill marks
-            addData(victim, PlayerDataType.KILL_MARKS, killMarks);
-
-        } else {
-            // If streaks are 0, handle the life system
-            if (victimLives - 1 == 0) {
-                victim.sendMessage(
-                        "Your ability has gone and you are entered into the lives system, be careful, and try to get streaks.");
-                setData(victim, PlayerDataType.LIVES, 5); // Reset lives
-            } else {
-                new PlayerLivesEvent(victim, victimLives - 1, LivesStatus.LOST).callEvent();
-                removeData(victim, PlayerDataType.STREAKS, 1);
-            }
-        }
-
-        // Handle the killer's reward (gain killstreak)
         final int killerStreaks = getStreaks(killer);
-        int newKillerStreaks = killerStreaks + 1; // Increment the killer's streak by 1 for the kill
+        final int killerLives = getLives(killer);
 
-        // If the killer has gained a killstreak, trigger killstreak event
-        new PlayerKillStreakEvent(killer, newKillerStreaks, KillStreakStatus.ACHIEVED).callEvent();
-        setData(killer, PlayerDataType.STREAKS, newKillerStreaks); // Update the killer's streak data
+        // if players not in lives mode then players are default so remove streaks or
+        // add it without problems
+        if (!PluginFacade.getPlayersInLivesMode().contains(killer.getUniqueId())
+                || !PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
+            removeData(victim, PlayerDataType.STREAKS, 1);
+            addData(killer, PlayerDataType.STREAKS, 1);
 
-        // If the killer reaches a certain number of kills (e.g., 4), give them a kill
-        // mark
-        if (newKillerStreaks % 4 == 0) {
-            addData(killer, PlayerDataType.KILL_MARKS, 1);
+            new PlayerKillStreakEvent(killer, killerStreaks + 1, KillStreakStatus.ACHIEVED).callEvent();
+            new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
+
+            if (killerStreaks + 1 <= 4) {
+                victim.getWorld().dropItemNaturally(victim.getEyeLocation(), null);
+            }
+            if ((killerStreaks + 1) % 4 == 0) {
+                int toDrop = killerStreaks / 4;
+                victim.getWorld().dropItemNaturally(victim.getEyeLocation(), null);
+            }
         }
+
+        // if vicitm streaks - 1 = 0 then enter him to lives mode and call event to
+        // disable abilites and remove them and remove poitions
+        if (victimStreaks - 1 == 0) {
+            new PlayerActionBar(getMessage("enter-livesmode")).execute(victim);
+            this.getPluginFacade().addPlayerToLivesMode(victim);
+            new PlayerLivesEvent(killer, 5, null).callEvent();
+        }
+
+        // if victim in lives mode and lost 1 lives after death
+        if (PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
+            removeData(victim, PlayerDataType.LIVES, 1);
+            new PlayerLivesEvent(victim, victimLives - 1, LivesStatus.LOST).callEvent();
+        }
+
+        // if killer in lives mode and got one kill add lives
+        if (PluginFacade.getPlayersInLivesMode().contains(killer.getUniqueId())) {
+            addData(killer, PlayerDataType.LIVES, 1);
+            new PlayerLivesEvent(killer, killerLives + 1, LivesStatus.ACHIEVED).callEvent();
+
+            // if killer in lives mode and has 5 or greater remove him from lives mode and
+            // say to him
+            if (killerLives + 1 > 5) {
+                getPluginFacade().removePlayerFromLivesMode(killer);
+                removePlayerEffects(killer);
+                new PlayerActionBar(getMessage("leave-livesmode")).execute(victim);
+                setData(killer, PlayerDataType.LIVES, 5);
+            }
+        }
+
     }
+
+    // if (newKillerStreaks % 4 == 0) {
 
     private int getLives(Player player) {
         return getDataConfig().getData(player, PlayerDataType.LIVES, 5);

@@ -111,4 +111,16 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
 
     }
 
+    @Override
+    public boolean hasAbility(Player player) {
+        return playerAbilities.containsKey(player.getUniqueId());
+    }
+
+    @Override
+    public void removeAbility(Player player) {
+        if (hasAbility(player)) {
+            playerAbilities.remove(player.getUniqueId());
+        }
+    }
+
 }

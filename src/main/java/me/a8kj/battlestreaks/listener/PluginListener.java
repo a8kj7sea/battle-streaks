@@ -1,7 +1,9 @@
 package me.a8kj.battlestreaks.listener;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.potion.PotionEffect;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -19,6 +21,16 @@ public class PluginListener implements Listener {
 
     public void register() {
         Bukkit.getPluginManager().registerEvents(this, pluginFacade.getPlugin());
+    }
+
+    public void removePlayerEffects(Player player) {
+        for (PotionEffect effect : player.getActivePotionEffects()) {
+            player.removePotionEffect(effect.getType());
+        }
+    }
+
+    public String getMessage(String key) {
+        return pluginFacade.getDefaultConfiguration().getYamConfiguration().getString("messages." + key, "no message");
     }
 
     public PlayerData getDataConfig() {

@@ -1,8 +1,13 @@
 package me.a8kj.battlestreaks.plugin;
 
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Logger;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.google.common.collect.Sets;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +42,9 @@ public class PluginFacade {
     private Configuration defaultConfiguration;
     private Configuration dataConfiguration;
 
+    @Getter
+    private static Set<UUID> playersInLivesMode = Sets.newHashSet();
+
     public void onLunch() {
         onPreLunch();
     }
@@ -49,6 +57,14 @@ public class PluginFacade {
         registerCommands();
         registerAbilities();
         playerAbilityManager = new PlayerAbilityManagerImpl(abilityManager);
+    }
+
+    public void addPlayerToLivesMode(Player player) {
+        playersInLivesMode.add(player.getUniqueId());
+    }
+
+    public void removePlayerFromLivesMode(Player player) {
+        playersInLivesMode.remove(player.getUniqueId());
     }
 
     private void registerAbilities() {
