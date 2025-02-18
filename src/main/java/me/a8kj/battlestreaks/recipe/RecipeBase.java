@@ -16,11 +16,11 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public abstract class RecipeBase implements Recipe {
 
-    private final @NonNull String name;
-    private final @NonNull ItemStack result;
-    private ShapedRecipe recipe;
-    private final @NonNull Plugin plugin;
-    private String[] pattern;
+    protected final @NonNull String name;
+    protected final @NonNull ItemStack result;
+    protected ShapedRecipe recipe;
+    protected final @NonNull Plugin plugin;
+    protected String[] pattern;
 
     @Override
     public void setPattern(String... pattern) {

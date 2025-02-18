@@ -9,9 +9,9 @@ import lombok.NonNull;
 import me.a8kj.battlestreaks.recipe.RecipeCraftListener;
 import me.a8kj.battlestreaks.util.ItemMetadataUtils;
 
-public class LifeCoreCraftListener extends RecipeCraftListener {
+public class CraftLifeCoreListener extends RecipeCraftListener {
 
-    public LifeCoreCraftListener(@NonNull Plugin plugin) {
+    public CraftLifeCoreListener(@NonNull Plugin plugin) {
         super(plugin);
         register();
     }

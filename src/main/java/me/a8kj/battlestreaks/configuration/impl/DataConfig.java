@@ -4,10 +4,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.a8kj.battlestreaks.configuration.Configuration;
 
-public class DefaultConfig extends Configuration {
+public class DataConfig extends Configuration {
 
-    public DefaultConfig(JavaPlugin plugin) {
-        super(plugin, "config", true);
+    public DataConfig(JavaPlugin plugin) {
+        super(plugin, "players-data", true);
     }
 
 }

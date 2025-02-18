@@ -9,7 +9,7 @@ import me.a8kj.battlestreaks.util.ItemStackBuilder;
 
 public class KillMarkRecipe extends RecipeBase {
 
-    public KillMarkRecipe(@NonNull String name, @NonNull Plugin plugin) {
+    public KillMarkRecipe(@NonNull Plugin plugin) {
         super("kill_mark",
                 new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
                         .setAmount(1)
