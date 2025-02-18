@@ -1,14 +1,20 @@
-package me.a8kj.battlestreaks.listener;
+package me.a8kj.battlestreaks.listener.impl;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import lombok.NonNull;
 import me.a8kj.battlestreaks.api.player.impl.AbilityActivateEvent;
+import me.a8kj.battlestreaks.listener.PluginListener;
+import me.a8kj.battlestreaks.plugin.PluginFacade;
 
-public class PlayerInteractListener implements Listener {
+public class PlayerInteractListener extends PluginListener {
+
+    public PlayerInteractListener(@NonNull PluginFacade pluginFacade) {
+        super(pluginFacade);
+    }
 
     @EventHandler
     public void onPlayerActivate(PlayerInteractEvent event) {
