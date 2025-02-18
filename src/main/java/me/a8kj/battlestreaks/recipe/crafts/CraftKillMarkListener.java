@@ -1,21 +1,18 @@
 package me.a8kj.battlestreaks.recipe.crafts;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-
 import lombok.NonNull;
+import me.a8kj.battlestreaks.plugin.PluginFacade;
 import me.a8kj.battlestreaks.recipe.RecipeCraftListener;
 import me.a8kj.battlestreaks.util.AndBooleanBuilder;
 import me.a8kj.battlestreaks.util.ItemMetadataUtils;
 
 public class CraftKillMarkListener extends RecipeCraftListener {
 
-    public CraftKillMarkListener(@NonNull Plugin plugin) {
-        super(plugin);
+    public CraftKillMarkListener(@NonNull PluginFacade pluginFacade) {
+        super(pluginFacade);
         register();
     }
 
@@ -71,7 +68,7 @@ public class CraftKillMarkListener extends RecipeCraftListener {
 
         if (isItemInSlot(inventory, 7, Material.TOTEM_OF_UNDYING)) {
             ItemStack totemItem = inventory.getItem(7);
-            if (ItemMetadataUtils.hasMetadata(totemItem, "totem_fragment", this.plugin))
+            if (ItemMetadataUtils.hasMetadata(totemItem, "totem_fragment", getPluginFacade().getPlugin()))
                 builder.append(true);
         } else {
             builder.append(false);
@@ -83,8 +80,6 @@ public class CraftKillMarkListener extends RecipeCraftListener {
             builder.append(false);
         }
 
-        // add condition to check if player not in live system
-
         return builder.toBoolean();
     }
 
@@ -92,21 +87,6 @@ public class CraftKillMarkListener extends RecipeCraftListener {
     protected boolean isMetResultCondition(ItemStack result) {
         return ItemMetadataUtils.hasMetaDisplayName(result, "&4Kill Mark")
                 && result.getType() == Material.TOTEM_OF_UNDYING;
-    }
-
-    @Override
-    protected void doSomethingElse(CraftItemEvent event, Player player, ApprovalStatus status) {
-        if (status == ApprovalStatus.ACCEPTED) {
-            player.sendMessage("You have kill mark yay !");
-            return;
-        } else {
-            player.sendMessage(getDeniedMessage());
-        }
-    }
-
-    @Override
-    protected String getDeniedMessage() {
-        return "You cannot create a kill mark item while you are in lives system!";
     }
 
 }

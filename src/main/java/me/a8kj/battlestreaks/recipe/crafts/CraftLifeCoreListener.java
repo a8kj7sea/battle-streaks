@@ -3,23 +3,22 @@ package me.a8kj.battlestreaks.recipe.crafts;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-
 import lombok.NonNull;
+import me.a8kj.battlestreaks.plugin.PluginFacade;
 import me.a8kj.battlestreaks.recipe.RecipeCraftListener;
 import me.a8kj.battlestreaks.util.ItemMetadataUtils;
 
 public class CraftLifeCoreListener extends RecipeCraftListener {
 
-    public CraftLifeCoreListener(@NonNull Plugin plugin) {
-        super(plugin);
+    public CraftLifeCoreListener(@NonNull PluginFacade pluginFacade) {
+        super(pluginFacade);
         register();
     }
 
     @Override
     protected boolean canCraft(CraftingInventory inventory) {
         ItemStack totemFragment = inventory.getItem(4);
-        return ItemMetadataUtils.hasMetadata(totemFragment, "totem_fragment", plugin);
+        return ItemMetadataUtils.hasMetadata(totemFragment, "totem_fragment", getPluginFacade().getPlugin());
     }
 
     @Override

@@ -29,6 +29,8 @@ import me.a8kj.battlestreaks.recipe.crafts.CraftTotemFragmentListener;
 import me.a8kj.battlestreaks.recipe.impl.KillMarkRecipe;
 import me.a8kj.battlestreaks.recipe.impl.LifeCoreRecipe;
 import me.a8kj.battlestreaks.recipe.impl.TotemFragmentRecipe;
+import me.a8kj.battlestreaks.recipe.interacts.KillMarksInteractListener;
+import me.a8kj.battlestreaks.recipe.interacts.LifeCoreInteractListener;
 
 @RequiredArgsConstructor
 @Getter
@@ -89,9 +91,11 @@ public class PluginFacade {
     }
 
     private void registerCraftRecipeListeners() {
-        new CraftKillMarkListener(plugin);
-        new CraftTotemFragmentListener(plugin);
-        new CraftKillMarkListener(plugin);
+        new CraftKillMarkListener(this);
+        new CraftTotemFragmentListener(this);
+        new CraftKillMarkListener(this);
+        new KillMarksInteractListener(this);
+        new LifeCoreInteractListener(this);
     }
 
     private void registerRecipes() {

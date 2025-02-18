@@ -3,16 +3,17 @@ package me.a8kj.battlestreaks.recipe.crafts;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-
 import lombok.NonNull;
+import me.a8kj.battlestreaks.plugin.PluginFacade;
 import me.a8kj.battlestreaks.recipe.RecipeCraftListener;
 import me.a8kj.battlestreaks.util.ItemMetadataUtils;
 
 public class CraftTotemFragmentListener extends RecipeCraftListener {
 
-    public CraftTotemFragmentListener(@NonNull Plugin plugin) {
-        super(plugin);
+   
+
+    public CraftTotemFragmentListener(@NonNull PluginFacade pluginFacade) {
+        super(pluginFacade);
         register();
     }
 

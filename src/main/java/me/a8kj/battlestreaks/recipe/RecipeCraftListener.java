@@ -1,24 +1,24 @@
 package me.a8kj.battlestreaks.recipe;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
-
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import me.a8kj.battlestreaks.listener.PluginListener;
+import me.a8kj.battlestreaks.plugin.PluginFacade;
 
-@RequiredArgsConstructor
 @Getter
-public abstract class RecipeCraftListener implements Listener {
+public abstract class RecipeCraftListener extends PluginListener {
+
+    public RecipeCraftListener(@NonNull PluginFacade pluginFacade) {
+        super(pluginFacade);
+    }
 
     protected abstract boolean canCraft(CraftingInventory inventory);
 
@@ -28,15 +28,9 @@ public abstract class RecipeCraftListener implements Listener {
 
     }
 
-    protected void register() {
-        Bukkit.getPluginManager().registerEvents(this, plugin);
-    }
-
     protected String getDeniedMessage() {
         return null;
     }
-
-    protected @NonNull final Plugin plugin;
 
     public enum ApprovalStatus {
         ACCEPTED, DENIED

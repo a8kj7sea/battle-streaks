@@ -76,7 +76,8 @@ public class PlayerDeathListener extends PluginListener {
         if (victimStreaks - 1 <= 0) {
             new PlayerActionBar(getMessage("enter-livesmode")).execute(victim);
             this.getPluginFacade().addPlayerToLivesMode(victim);
-            setData(victim, PlayerDataType.STREAKS, -1);
+            setData(victim, PlayerDataType.STREAKS, 0);
+            setData(victim, PlayerDataType.LIVES, 5);
             new PlayerLivesEvent(killer, 5, null).callEvent();
         }
 
