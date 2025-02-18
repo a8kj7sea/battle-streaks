@@ -12,6 +12,7 @@ public interface PlayerAbilityManager {
     void deactivateAbility(Player player, String abilityName);
 
     void updateAbilities(Player player);
+    
 
     List<String> getAllAbilities(Player player);
 

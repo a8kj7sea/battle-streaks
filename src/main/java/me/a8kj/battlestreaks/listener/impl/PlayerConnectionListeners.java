@@ -25,6 +25,7 @@ public class PlayerConnectionListeners extends PluginListener {
             if (!getDataConfig().contains(event.getPlayer())) {
                 getDataConfig().setData(event.getPlayer(), PlayerDataType.LIVES, 5);
                 getDataConfig().setData(event.getPlayer(), PlayerDataType.STREAKS, 0);
+                getDataConfig().setData(event.getPlayer(), PlayerDataType.KILL_MARKS, 0);
                 getDataConfig().setData(event.getPlayer(), PlayerDataType.ABILITY, "NONE");
             }
         });
