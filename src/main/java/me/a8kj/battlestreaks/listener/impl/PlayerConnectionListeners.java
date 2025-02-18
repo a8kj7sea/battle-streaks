@@ -2,7 +2,6 @@ package me.a8kj.battlestreaks.listener.impl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerLoginEvent;
 
@@ -21,14 +20,20 @@ public class PlayerConnectionListeners extends PluginListener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
+
         pool.execute(() -> {
             if (!getDataConfig().contains(event.getPlayer())) {
-                getDataConfig().setData(event.getPlayer(), PlayerDataType.LIVES, 5);
-                getDataConfig().setData(event.getPlayer(), PlayerDataType.STREAKS, 0);
-                getDataConfig().setData(event.getPlayer(), PlayerDataType.KILL_MARKS, 0);
-                getDataConfig().setData(event.getPlayer(), PlayerDataType.ABILITY, "NONE");
+                int defaultLives = getDefaultConfig().getConfigurationFile().getInt("default-data.lives", 5);
+                int defaultStreaks = getDefaultConfig().getConfigurationFile().getInt("default-data.streaks", 0);
+                int defaultKillMarks = getDefaultConfig().getConfigurationFile().getInt("default-data.kill_marks", 0);
+                String defaultAbility = getDefaultConfig().getConfigurationFile().getString("default-data.ability",
+                        "NONE");
+
+                getDataConfig().setData(event.getPlayer(), PlayerDataType.LIVES, defaultLives);
+                getDataConfig().setData(event.getPlayer(), PlayerDataType.STREAKS, defaultStreaks);
+                getDataConfig().setData(event.getPlayer(), PlayerDataType.KILL_MARKS, defaultKillMarks);
+                getDataConfig().setData(event.getPlayer(), PlayerDataType.ABILITY, defaultAbility);
             }
         });
     }
-
 }

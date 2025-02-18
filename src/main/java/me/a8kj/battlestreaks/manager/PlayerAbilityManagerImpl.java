@@ -24,7 +24,8 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
     @Override
     public void activateAbility(Player player, String abilityName) {
         AbilityBase ability = abilityManager.getAbility(abilityName);
-        if (ability != null && playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName)) {
+        if (ability != null
+                && playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName)) {
             ability.activate(player);
         } else {
             player.sendMessage("You don't have this ability.");
@@ -34,7 +35,8 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
     @Override
     public void deactivateAbility(Player player, String abilityName) {
         AbilityBase ability = abilityManager.getAbility(abilityName);
-        if (ability != null && playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName)) {
+        if (ability != null
+                && playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName)) {
             ability.deactivate(player);
         } else {
             player.sendMessage("You don't have this ability.");
@@ -79,4 +81,34 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
             player.sendMessage("You don't have any abilities to replace.");
         }
     }
+
+    @Override
+    public void replaceAbility(Player player, String newAbility) {
+        UUID playerUUID = player.getUniqueId();
+        Set<String> abilities = playerAbilities.getOrDefault(playerUUID, new HashSet<>());
+
+        // Check if the ability exists in the ability manager
+        AbilityBase abilityInstance = abilityManager.getAbility(newAbility);
+        if (abilityInstance == null) {
+            player.sendMessage("⚠️ Unknown ability: " + newAbility);
+            return;
+        }
+
+        // Remove all existing abilities
+        if (!abilities.isEmpty()) {
+            for (String abilityName : abilities) {
+                AbilityBase oldAbility = abilityManager.getAbility(abilityName);
+                if (oldAbility != null) {
+                    oldAbility.deactivate(player);
+                }
+            }
+            abilities.clear();
+        }
+
+        abilities.add(newAbility);
+        playerAbilities.put(playerUUID, abilities);
+        abilityManager.registerAbility(abilityInstance);
+
+    }
+
 }

@@ -13,12 +13,12 @@ public class AbilityManagerImpl implements AbilityManager {
 
     @Override
     public void registerAbility(AbilityBase ability) {
-        abilities.put(ability.getName(), ability);
+        abilities.put(ability.getName().toLowerCase(), ability);
     }
 
     @Override
     public void activateAbility(Player player, String abilityName) {
-        AbilityBase ability = abilities.get(abilityName);
+        AbilityBase ability = abilities.get(abilityName.toLowerCase());
         if (ability != null) {
             ability.activate(player);
         }
@@ -26,7 +26,7 @@ public class AbilityManagerImpl implements AbilityManager {
 
     @Override
     public void deactivateAbility(Player player, String abilityName) {
-        AbilityBase ability = abilities.get(abilityName);
+        AbilityBase ability = abilities.get(abilityName.toLowerCase());
         if (ability != null) {
             ability.deactivate(player);
         }
