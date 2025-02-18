@@ -9,21 +9,22 @@ import lombok.NonNull;
 import me.a8kj.battlestreaks.recipe.RecipeCraftListener;
 import me.a8kj.battlestreaks.util.ItemMetadataUtils;
 
-public class CraftTotemFragmentListener extends RecipeCraftListener {
+public class LifeCoreCraftListener extends RecipeCraftListener {
 
-    public CraftTotemFragmentListener(@NonNull Plugin plugin) {
+    public LifeCoreCraftListener(@NonNull Plugin plugin) {
         super(plugin);
         register();
     }
 
     @Override
     protected boolean canCraft(CraftingInventory inventory) {
-        return inventory.getItem(1).getType() == Material.TOTEM_OF_UNDYING;
+        ItemStack totemFragment = inventory.getItem(4);
+        return ItemMetadataUtils.hasMetadata(totemFragment, "totem_fragment", plugin);
     }
 
     @Override
     protected boolean isMetResultCondition(ItemStack result) {
-        return ItemMetadataUtils.hasMetaDisplayName(result, "&eTotem Fragment")
+        return ItemMetadataUtils.hasMetaDisplayName(result, "&6Life Core")
                 && result.getType() == Material.TOTEM_OF_UNDYING;
     }
 

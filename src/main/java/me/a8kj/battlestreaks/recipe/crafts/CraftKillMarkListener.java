@@ -7,14 +7,16 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
+import lombok.NonNull;
 import me.a8kj.battlestreaks.recipe.RecipeCraftListener;
 import me.a8kj.battlestreaks.util.AndBooleanBuilder;
 import me.a8kj.battlestreaks.util.ItemMetadataUtils;
 
 public class CraftKillMarkListener extends RecipeCraftListener {
 
-    public CraftKillMarkListener(Plugin plugin) {
+    public CraftKillMarkListener(@NonNull Plugin plugin) {
         super(plugin);
+        register();
     }
 
     @Override
@@ -69,7 +71,7 @@ public class CraftKillMarkListener extends RecipeCraftListener {
 
         if (isItemInSlot(inventory, 7, Material.TOTEM_OF_UNDYING)) {
             ItemStack totemItem = inventory.getItem(7);
-            if (ItemMetadataUtils.hasMetadata(totemItem, "totem_fragment", null))
+            if (ItemMetadataUtils.hasMetadata(totemItem, "totem_fragment", this.plugin))
                 builder.append(true);
         } else {
             builder.append(false);
