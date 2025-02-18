@@ -1,0 +1,55 @@
+package me.a8kj.battlestreaks.recipe;
+
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
+
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
+public abstract class RecipeBase implements Recipe {
+
+    private final @NonNull String name;
+    private final @NonNull ItemStack result;
+    private ShapedRecipe recipe;
+    private final @NonNull Plugin plugin;
+    private String[] pattern;
+
+    @Override
+    public void setPattern(String... pattern) {
+        this.pattern = pattern;
+    }
+
+    @Override
+    public void setIngredient(char letter, Material material) {
+        this.recipe.setIngredient(letter, material);
+    }
+
+    @Override
+    public void register() {
+        this.recipe = new ShapedRecipe(new NamespacedKey(plugin, name), result);
+        this.recipe.shape(pattern);
+        this.plugin.getServer().addRecipe(this.recipe);
+    }
+
+    @Override
+    public void setMetaData(String key, String value, Plugin plugin) {
+        if (result == null || !result.hasItemMeta()) {
+            return;
+        }
+
+        ItemMeta meta = result.getItemMeta();
+        if (meta != null) {
+            NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+            meta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, value);
+            result.setItemMeta(meta);
+        }
+    }
+}
