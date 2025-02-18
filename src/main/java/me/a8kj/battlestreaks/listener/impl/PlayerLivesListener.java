@@ -11,6 +11,7 @@ import me.a8kj.battlestreaks.api.player.impl.PlayerLivesEvent;
 import me.a8kj.battlestreaks.api.player.impl.PlayerLivesEvent.LivesStatus;
 import me.a8kj.battlestreaks.listener.PluginListener;
 import me.a8kj.battlestreaks.manager.NegativeEffectManager;
+import me.a8kj.battlestreaks.player.properties.PlayerDataType;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 
 public class PlayerLivesListener extends PluginListener {
@@ -30,6 +31,7 @@ public class PlayerLivesListener extends PluginListener {
             if (lives == 5) {
                 if (getPluginFacade().getPlayerAbilityManager().hasAbility(player)) {
                     getPluginFacade().getPlayerAbilityManager().removeAbility(player);
+                    getDataConfig().setData(player, PlayerDataType.ABILITY, "NONE");
                 }
 
                 removePlayerEffects(player);
