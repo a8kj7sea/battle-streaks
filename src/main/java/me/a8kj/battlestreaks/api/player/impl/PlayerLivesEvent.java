@@ -7,12 +7,18 @@ import lombok.NonNull;
 import me.a8kj.battlestreaks.api.player.PlayerEvent;
 
 @Getter
-public class PlayerLivesLostEvent extends PlayerEvent {
+public class PlayerLivesEvent extends PlayerEvent {
     private final int remainingLives;
+    private final LivesStatus status;
 
-    public PlayerLivesLostEvent(@NonNull Player player, int remainingLives) {
+    public enum LivesStatus {
+        ACHIEVED, LOST
+    }
+
+    public PlayerLivesEvent(@NonNull Player player, int remainingLives, LivesStatus livesStatus) {
         super(player);
         this.remainingLives = remainingLives;
+        this.status = livesStatus;
     }
 
 }

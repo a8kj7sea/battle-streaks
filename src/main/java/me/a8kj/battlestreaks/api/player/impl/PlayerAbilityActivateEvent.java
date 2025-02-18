@@ -4,9 +4,9 @@ import org.bukkit.entity.Player;
 
 import me.a8kj.battlestreaks.api.player.PlayerEvent;
 
-public class AbilityActivateEvent extends PlayerEvent {
+public class PlayerAbilityActivateEvent extends PlayerEvent {
 
-    public AbilityActivateEvent(Player player) {
+    public PlayerAbilityActivateEvent(Player player) {
         super(player);
     }
 

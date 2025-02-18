@@ -6,7 +6,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import lombok.NonNull;
-import me.a8kj.battlestreaks.api.player.impl.AbilityActivateEvent;
+import me.a8kj.battlestreaks.api.player.impl.PlayerAbilityActivateEvent;
 import me.a8kj.battlestreaks.listener.PluginListener;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 
@@ -24,7 +24,7 @@ public class PlayerInteractListener extends PluginListener {
                 && (event.getAction() == Action.RIGHT_CLICK_AIR ||
                         event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 
-            new AbilityActivateEvent(player).callEvent();
+            new PlayerAbilityActivateEvent(player).callEvent();
         }
     }
 

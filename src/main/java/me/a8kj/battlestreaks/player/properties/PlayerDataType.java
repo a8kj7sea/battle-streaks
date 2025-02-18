@@ -1,5 +1,5 @@
 package me.a8kj.battlestreaks.player.properties;
 
 public enum PlayerDataType {
-    LIVES, STREAKS, ABILITY;
+    LIVES, STREAKS, ABILITY, KILL_MARK;
 }
