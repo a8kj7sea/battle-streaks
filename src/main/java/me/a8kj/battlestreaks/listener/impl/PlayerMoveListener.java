@@ -19,11 +19,26 @@ public class PlayerMoveListener extends PluginListener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
+
         if (PluginFacade.getPlayersInLivesMode().contains(event.getPlayer().getUniqueId())) {
-            new PlayerActionBar("                        " + getLives(event.getPlayer()) + "&c❤️")
-                    .execute(event.getPlayer());
+            new PlayerActionBar(drawHearts(event.getPlayer())).execute(event.getPlayer());
         }
 
+    }
+
+    private int getStreaks(Player player) {
+        return getDataConfig().getData(player, PlayerDataType.STREAKS, -1);
+    }
+
+    private String drawHearts(Player player) {
+        StringBuilder stringBuilder = new StringBuilder();
+        int lives = getLives(player);
+        if (lives <= 0)
+            return "&4No More lives";
+        for (int x = 0; x < lives; ++x) {
+            stringBuilder.append("&c\u2764");
+        }
+        return stringBuilder.toString();
     }
 
     private int getLives(Player player) {

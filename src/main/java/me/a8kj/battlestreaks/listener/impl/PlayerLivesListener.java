@@ -13,6 +13,7 @@ import me.a8kj.battlestreaks.listener.PluginListener;
 import me.a8kj.battlestreaks.manager.NegativeEffectManager;
 import me.a8kj.battlestreaks.player.properties.PlayerDataType;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
+import me.a8kj.battlestreaks.util.ChatUtils;
 
 public class PlayerLivesListener extends PluginListener {
 
@@ -77,7 +78,7 @@ public class PlayerLivesListener extends PluginListener {
                     NegativeEffectManager.applyNegativeEffect(player, effectName.toLowerCase());
 
                     // Display the action bar message
-                    new PlayerActionBar(message).execute(player);
+                    player.sendMessage(ChatUtils.format(message));
                 }
             }
         }

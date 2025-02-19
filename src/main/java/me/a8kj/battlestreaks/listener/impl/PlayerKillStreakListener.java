@@ -11,6 +11,7 @@ import me.a8kj.battlestreaks.api.player.impl.PlayerKillStreakEvent.KillStreakSta
 import me.a8kj.battlestreaks.listener.PluginListener;
 import me.a8kj.battlestreaks.player.PlayerAbilityManager;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
+import me.a8kj.battlestreaks.util.ChatUtils;
 
 public class PlayerKillStreakListener extends PluginListener {
 
@@ -52,7 +53,7 @@ public class PlayerKillStreakListener extends PluginListener {
 
                 manager.replaceAbility(player, abilityName.toLowerCase());
 
-                new PlayerActionBar(message).execute(player);
+                player.sendMessage(ChatUtils.format(message));
                 return;
             }
         }

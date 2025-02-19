@@ -24,6 +24,8 @@ public class NegativeEffectManager {
         if (effect != null) {
             effect.apply(player);
             players.put(player.getUniqueId(), effect);
+        } else {
+            player.sendMessage("debug: fe error!");
         }
     }
 
