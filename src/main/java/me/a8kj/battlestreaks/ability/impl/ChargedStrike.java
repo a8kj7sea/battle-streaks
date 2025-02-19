@@ -4,46 +4,27 @@ import org.bukkit.entity.Player;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
+import me.a8kj.battlestreaks.plugin.PluginFacade;
 
 public class ChargedStrike extends AbilityBase {
-    public ChargedStrike() {
-        super("charged_strike");
-    }
 
-    private int cooldown = 30;
+    private final PluginFacade pluginFacade;
+
+    public ChargedStrike(String name, CooldownTime cooldownTime, PluginFacade pluginFacade) {
+        super(name, "Perform a charged attack every 30 seconds, increasing your damage output", cooldownTime);
+        this.pluginFacade = pluginFacade;
+    }
 
     @Override
     public void activate(Player player) {
-        if (isReady(player)) {
-            // player.performChargedAttack(); // Add your attack logic here
-            cooldown = 30;
-        }
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'activate'");
     }
 
     @Override
     public void deactivate(Player player) {
-        System.out.println("Charged Strike deactivated.");
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deactivate'");
     }
 
-    @Override
-    public boolean isReady(Player player) {
-        return cooldown == 0;
-    }
-
-    @Override
-    public void update(Player player) {
-        if (cooldown > 0) {
-            cooldown--;
-        }
-    }
-
-    @Override
-    public String getDescription() {
-        return "Perform a charged attack every 30 seconds, increasing your damage output.";
-    }
-
-    @Override
-    public CooldownTime getCooldownTime() {
-        return new CooldownTime(0, 30);
-    }
 }

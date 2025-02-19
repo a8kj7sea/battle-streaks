@@ -10,6 +10,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.a8kj.battlestreaks.ability.AbilityManager;
 import me.a8kj.battlestreaks.configuration.impl.DefaultConfig;
+import me.a8kj.battlestreaks.effect.NegativeEffectManager;
 import me.a8kj.battlestreaks.player.PlayerAbilityManager;
 import me.a8kj.battlestreaks.player.PlayerData;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
@@ -28,6 +29,10 @@ public class PluginListener implements Listener {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
+    }
+
+    public NegativeEffectManager getEffectManager() {
+        return this.pluginFacade.getEffectManager();
     }
 
     public AbilityManager getAbilityManager() {

@@ -30,7 +30,10 @@ public class LifeCoreInteractListener extends CustomInteractListener {
     public boolean canExecute(PlayerInteractEvent event, Player player) {
 
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-
+            if (!PluginFacade.getPlayersInLivesMode().contains(player.getUniqueId())) {
+                player.sendMessage("\u00a7cYou cannot use it in streaks mode !");
+                return false;
+            }
             return true;
         }
 

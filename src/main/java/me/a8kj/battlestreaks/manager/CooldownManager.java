@@ -8,7 +8,7 @@ import me.a8kj.battlestreaks.cooldown.Cooldown;
 
 public class CooldownManager implements Cooldown {
 
-    private final Map<UUID, Map<String, Long>> cooldowns = new HashMap<>();
+    private static final Map<UUID, Map<String, Long>> cooldowns = new HashMap<>();
 
     @Override
     public void start(UUID playerId, String cooldownName, int minutes, int seconds) {

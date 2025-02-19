@@ -11,10 +11,10 @@ import me.a8kj.battlestreaks.cooldown.CooldownTime;
 public class BlindingBurst extends AbilityBase {
 
     public BlindingBurst(String name, String description, CooldownTime cooldownTime) {
-        super(name, description, cooldownTime);
-    }
-
-    @Override
+            super(name, description, cooldownTime);
+        }
+    
+        @Override
     public void activate(Player player) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'activate'");
@@ -25,5 +25,5 @@ public class BlindingBurst extends AbilityBase {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deactivate'");
     }
-   
+ 
 }

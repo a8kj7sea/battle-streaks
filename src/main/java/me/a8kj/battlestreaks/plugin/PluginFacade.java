@@ -22,6 +22,7 @@ import me.a8kj.battlestreaks.command.ReloadConfigCommand;
 import me.a8kj.battlestreaks.configuration.Configuration;
 import me.a8kj.battlestreaks.configuration.impl.DataConfig;
 import me.a8kj.battlestreaks.configuration.impl.DefaultConfig;
+import me.a8kj.battlestreaks.effect.NegativeEffectManager;
 import me.a8kj.battlestreaks.listener.impl.PlayerActiveListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerConnectionListeners;
 import me.a8kj.battlestreaks.listener.impl.PlayerDeathListener;
@@ -31,6 +32,7 @@ import me.a8kj.battlestreaks.listener.impl.PlayerLivesListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerMoveListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerRespawnListener;
 import me.a8kj.battlestreaks.manager.AbilityManagerImpl;
+import me.a8kj.battlestreaks.manager.NegativeEffectManagerImpl;
 import me.a8kj.battlestreaks.manager.PlayerAbilityManagerImpl;
 import me.a8kj.battlestreaks.player.PlayerAbilityManager;
 import me.a8kj.battlestreaks.recipe.crafts.CraftKillMarkListener;
@@ -50,6 +52,7 @@ public class PluginFacade {
 
     private PlayerAbilityManager playerAbilityManager;
     private final AbilityManager abilityManager = new AbilityManagerImpl();
+    private final NegativeEffectManager effectManager = new NegativeEffectManagerImpl();
     private Configuration defaultConfiguration;
     private Configuration dataConfiguration;
 
@@ -105,6 +108,7 @@ public class PluginFacade {
         new PlayerLivesListener(this);
         new PlayerMoveListener(this);
         new PlayerRespawnListener(this);
+        new PlayerDeathListener(this);
     }
 
     private void registerRecipeListeners() {
