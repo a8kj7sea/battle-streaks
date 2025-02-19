@@ -9,11 +9,7 @@ public interface Ability {
     void activate(Player player);
 
     void deactivate(Player player);
-
-    boolean isReady(Player player);
-
-    void update(Player player);
-
+    
     CooldownTime getCooldownTime();
 
     String getName();

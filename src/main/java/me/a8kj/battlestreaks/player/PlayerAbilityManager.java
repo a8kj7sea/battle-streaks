@@ -1,27 +1,41 @@
 package me.a8kj.battlestreaks.player;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+
+import java.util.Optional;
+
 import org.bukkit.entity.Player;
-import java.util.List;
 
 public interface PlayerAbilityManager {
-    void registerAbility(Player player, AbilityBase ability);
 
-    void activateAbility(Player player, String abilityName);
+    void activatePlayerAbility(Player player);
 
-    void deactivateAbility(Player player, String abilityName);
-
-    void updateAbilities(Player player);
-
-    boolean hasAbility(Player player);
-
-    List<String> getAllAbilities(Player player);
-
-    boolean hasAbility(Player player, String abilityName);
+    void deactivatePlayerAbility(Player player);
 
     void replaceAbility(Player player, AbilityBase newAbility);
 
     void replaceAbility(Player player, String newAbility);
 
     void removeAbility(Player player);
+
+    boolean hasAbility(Player player);
+
+    boolean hasAbility(Player player, String abilityName);
+
+    boolean hasAbility(Player player, AbilityBase ability);
+
+    void registerAbility(Player player, AbilityBase ability);
+
+    void registerAbility(Player player, String ability);
+
+    void unRegisterAbility(Player player);
+
+    boolean isAbilityOnCooldown(Player player);
+
+    void saveAbilities(Player player);
+
+    void loadAbilities(Player player);
+
+    Optional<AbilityBase> getAbility(Player player);
+
 }

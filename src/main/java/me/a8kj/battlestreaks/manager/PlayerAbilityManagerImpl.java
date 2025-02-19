@@ -9,124 +9,80 @@ import java.util.*;
 public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
     private final AbilityManager abilityManager;
     private final Map<UUID, Set<String>> playerAbilities = new HashMap<>(); // Player UUID to ability names
-
-    public PlayerAbilityManagerImpl(AbilityManager abilityManager) {
-        this.abilityManager = abilityManager;
-    }
-
     @Override
-    public void registerAbility(Player player, AbilityBase ability) {
-        abilityManager.registerAbility(ability);
-        playerAbilities.putIfAbsent(player.getUniqueId(), new HashSet<>());
-        playerAbilities.get(player.getUniqueId()).add(ability.getName());
+    public void activatePlayerAbility(Player player) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'activatePlayerAbility'");
     }
-
     @Override
-    public void activateAbility(Player player, String abilityName) {
-        AbilityBase ability = abilityManager.getAbility(abilityName);
-        if (ability != null
-                && playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName)) {
-            ability.activate(player);
-        } else {
-            player.sendMessage("You don't have this ability.");
-        }
+    public void deactivatePlayerAbility(Player player) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deactivatePlayerAbility'");
     }
-
-    @Override
-    public void deactivateAbility(Player player, String abilityName) {
-        AbilityBase ability = abilityManager.getAbility(abilityName);
-        if (ability != null
-                && playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName)) {
-            ability.deactivate(player);
-        } else {
-            player.sendMessage("You don't have this ability.");
-        }
-    }
-
-    @Override
-    public void updateAbilities(Player player) {
-        Set<String> abilities = playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet());
-        for (String abilityName : abilities) {
-            AbilityBase ability = abilityManager.getAbility(abilityName);
-            if (ability != null) {
-                ability.update(player);
-            }
-        }
-    }
-
-    @Override
-    public List<String> getAllAbilities(Player player) {
-        return new ArrayList<>(playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()));
-    }
-
-    @Override
-    public boolean hasAbility(Player player, String abilityName) {
-        return playerAbilities.getOrDefault(player.getUniqueId(), Collections.emptySet()).contains(abilityName);
-    }
-
     @Override
     public void replaceAbility(Player player, AbilityBase newAbility) {
-        Set<String> abilities = playerAbilities.get(player.getUniqueId());
-        if (abilities != null) {
-            if (abilities.contains(newAbility.getName())) {
-                AbilityBase oldAbility = abilityManager.getAbility(newAbility.getName());
-                if (oldAbility != null) {
-                    oldAbility.deactivate(player);
-                }
-                abilities.remove(newAbility.getName());
-            }
-            abilities.add(newAbility.getName());
-            abilityManager.registerAbility(newAbility);
-        } else {
-            player.sendMessage("You don't have any abilities to replace.");
-        }
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'replaceAbility'");
     }
-
     @Override
     public void replaceAbility(Player player, String newAbility) {
-        UUID playerUUID = player.getUniqueId();
-        Set<String> abilities = playerAbilities.getOrDefault(playerUUID, new HashSet<>());
-
-        // Check if the ability exists in the ability manager
-        AbilityBase abilityInstance = abilityManager.getAbility(newAbility);
-        if (abilityInstance == null) {
-            player.sendMessage("⚠️ Unknown ability: " + newAbility);
-            return;
-        }
-
-        // Remove all existing abilities
-        if (!abilities.isEmpty()) {
-            for (String abilityName : abilities) {
-                AbilityBase oldAbility = abilityManager.getAbility(abilityName);
-                if (oldAbility != null) {
-                    oldAbility.deactivate(player);
-                }
-            }
-            abilities.clear();
-        }
-
-        abilities.add(newAbility);
-        playerAbilities.put(playerUUID, abilities);
-        abilityManager.registerAbility(abilityInstance);
-
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'replaceAbility'");
     }
-
-    @Override
-    public boolean hasAbility(Player player) {
-        return playerAbilities.containsKey(player.getUniqueId());
-    }
-
     @Override
     public void removeAbility(Player player) {
-        if (hasAbility(player)) {
-
-            for (String s : this.getAllAbilities(player)) {
-                deactivateAbility(player, s);
-            }
-
-            playerAbilities.remove(player.getUniqueId());
-
-        }
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeAbility'");
+    }
+    @Override
+    public boolean hasAbility(Player player) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'hasAbility'");
+    }
+    @Override
+    public boolean hasAbility(Player player, String abilityName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'hasAbility'");
+    }
+    @Override
+    public boolean hasAbility(Player player, AbilityBase ability) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'hasAbility'");
+    }
+    @Override
+    public void registerAbility(Player player, AbilityBase ability) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'registerAbility'");
+    }
+    @Override
+    public void registerAbility(Player player, String ability) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'registerAbility'");
+    }
+    @Override
+    public void unRegisterAbility(Player player) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'unRegisterAbility'");
+    }
+    @Override
+    public boolean isAbilityOnCooldown(Player player) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isAbilityOnCooldown'");
+    }
+    @Override
+    public void saveAbilities(Player player) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveAbilities'");
+    }
+    @Override
+    public void loadAbilities(Player player) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'loadAbilities'");
+    }
+    @Override
+    public AbilityBase getAbility(Player player) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAbility'");
     }
 
 }

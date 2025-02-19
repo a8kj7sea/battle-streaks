@@ -9,50 +9,21 @@ import me.a8kj.battlestreaks.ability.AbilityBase;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
 public class BlindingBurst extends AbilityBase {
-    public BlindingBurst() {
-        super("blinding_burst");
-    }
 
-    private int cooldown = 60;
+    public BlindingBurst(String name, String description, CooldownTime cooldownTime) {
+        super(name, description, cooldownTime);
+    }
 
     @Override
     public void activate(Player player) {
-        if (isReady(player)) {
-            // Get all entities around the player in a specific radius
-            for (Entity entity : player.getNearbyEntities(10, 10, 10)) {
-                if (entity instanceof Player) {
-                    Player target = (Player) entity;
-                    target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 1));
-                }
-            }
-            cooldown = 60;
-        }
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'activate'");
     }
 
     @Override
     public void deactivate(Player player) {
-        System.out.println("Blinding Burst deactivated.");
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deactivate'");
     }
-
-    @Override
-    public boolean isReady(Player player) {
-        return cooldown == 0;
-    }
-
-    @Override
-    public void update(Player player) {
-        if (cooldown > 0) {
-            cooldown--;
-        }
-    }
-
-    @Override
-    public String getDescription() {
-        return "Unleash an AoE explosion that blinds all nearby enemies every 60 seconds.";
-    }
-
-    @Override
-    public CooldownTime getCooldownTime() {
-        return new CooldownTime(1, 0);
-    }
+   
 }

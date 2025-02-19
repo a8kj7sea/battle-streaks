@@ -53,8 +53,12 @@ public class DataConfig extends Configuration implements PlayerData {
     }
 
     @Override
-    public boolean hasAbility(Player player) {
-        return getData(player, PlayerDataType.ABILITY, "NONE") != "NONE";
+    public boolean hasData(Player player, PlayerDataType playerDataType, DataType dataType) {
+        if (!contains(player))
+            return false;
+
+        return this.getYamConfiguration()
+                .isSet("players-data." + player.getName() + "." + playerDataType.name().toLowerCase());
     }
 
 }

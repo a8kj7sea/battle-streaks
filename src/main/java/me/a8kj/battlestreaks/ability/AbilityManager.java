@@ -1,18 +1,18 @@
 package me.a8kj.battlestreaks.ability;
 
-import org.bukkit.entity.Player;
-import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public interface AbilityManager {
-    void registerAbility(AbilityBase ability);
+    void registerAbility(String name, AbilityBase ability);
 
-    void activateAbility(Player player, String abilityName);
+    void unRegisterAbility(String name);
 
-    void deactivateAbility(Player player, String abilityName);
+    Optional<AbilityBase> getAbility(String name);
 
-    void updateAbilities(Player player);
+    Map<String, AbilityBase> getAbilities();
 
-    AbilityBase getAbility(String name);
+    void updateAbilities(Map<String, AbilityBase> abilities);
 
-    List<String> getAllAbilities();
+    boolean isAbilityRegistered(String name);
 }

@@ -8,6 +8,10 @@ import static java.lang.Math.abs;
 
 public interface PlayerData {
 
+    public enum DataType {
+        TEXT, NUMBER;
+    }
+
     void setData(Player player, PlayerDataType playerDataType, int amount);
 
     void setData(Player player, PlayerDataType playerDataType, String value);
@@ -26,7 +30,17 @@ public interface PlayerData {
         this.setData(player, playerDataType, getData(player, playerDataType, 0) + abs(toAdd));
     }
 
-    boolean hasAbility(Player player);
+    default boolean hasData(Player player, PlayerDataType playerDataType, DataType dataType) {
+
+        if (!contains(player))
+            return false;
+
+        if (DataType.NUMBER == dataType) {
+            return getData(player, playerDataType, 0) != 0;
+        } else {
+            return getData(player, playerDataType, null) != null;
+        }
+    }
 
     default void removeData(Player player, PlayerDataType playerDataType, int toRemove) {
         if (playerDataType == null) {
