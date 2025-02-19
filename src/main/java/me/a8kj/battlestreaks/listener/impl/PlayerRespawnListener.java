@@ -5,7 +5,6 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 import lombok.NonNull;
 import me.a8kj.battlestreaks.listener.PluginListener;
-import me.a8kj.battlestreaks.manager.NegativeEffectManager;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 
 public class PlayerRespawnListener extends PluginListener {
