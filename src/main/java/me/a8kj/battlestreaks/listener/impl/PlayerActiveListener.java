@@ -2,46 +2,53 @@ package me.a8kj.battlestreaks.listener.impl;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-
 import lombok.NonNull;
-import me.a8kj.battlestreaks.ability.Ability;
+import me.a8kj.battlestreaks.ability.AbilityBase;
 import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
 import me.a8kj.battlestreaks.api.player.impl.PlayerAbilityActivateEvent;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
 import me.a8kj.battlestreaks.listener.PluginListener;
 import me.a8kj.battlestreaks.manager.CooldownManager;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
+import java.util.Optional;
 
 public class PlayerActiveListener extends PluginListener {
+
+    private static final CooldownManager abilitiesCooldown = new CooldownManager();
 
     public PlayerActiveListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
         this.register();
     }
 
-    private static CooldownManager abilitiesCooldown = new CooldownManager();
-
     @EventHandler
     public void onPlayerActiveHisAbility(PlayerAbilityActivateEvent event) {
         Player player = event.getPlayer();
+
         if (!getPlayerAbilityManager().hasAbility(player)) {
-            player.sendMessage("[debug] you don't have ability");
+            player.sendMessage("[debug] You don't have an ability!");
             return;
         }
 
-        getPlayerAbilityManager().getAllAbilities(player).forEach(name -> {
-            if (abilitiesCooldown.isOnCooldown(player.getUniqueId(), name)) {
-                new PlayerActionBar("&bYou are on cooldown").execute(player);
-                return;
-            }
+        Optional<AbilityBase> optionalAbility = getPlayerAbilityManager().getAbility(player);
 
-            getPlayerAbilityManager().activateAbility(player, name);
-            Ability ability = getAbilityManager().getAbility(name);
-            CooldownTime cooldownTime = ability.getCooldownTime();
-            abilitiesCooldown.start(player.getUniqueId(), name, cooldownTime.getMinutes(), cooldownTime.getSeconds());
-            new PlayerActionBar("&6Your ability has been enabled!").execute(player);
-        });
+        if (optionalAbility.isEmpty()) {
+            player.sendMessage("[debug] Your ability is invalid!");
+            return;
+        }
 
+        AbilityBase ability = optionalAbility.get();
+        String abilityName = ability.getName();
+
+        if (abilitiesCooldown.isOnCooldown(player.getUniqueId(), abilityName)) {
+            new PlayerActionBar("&bYou are on cooldown").execute(player);
+            return;
+        }
+
+        getPlayerAbilityManager().activatePlayerAbility(player);
+        CooldownTime cooldownTime = ability.getCooldownTime();
+        abilitiesCooldown.start(player.getUniqueId(), abilityName, cooldownTime.getMinutes(),
+                cooldownTime.getSeconds());
+        new PlayerActionBar("&6Your ability has been enabled!").execute(player);
     }
-
 }

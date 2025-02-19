@@ -12,7 +12,6 @@ public class CooldownManager implements Cooldown {
 
     @Override
     public void start(UUID playerId, String cooldownName, int minutes, int seconds) {
-        // Convert minutes to seconds and add the additional seconds
         int totalSeconds = (minutes * 60) + seconds;
         long expirationTime = System.currentTimeMillis() + (totalSeconds * 1000L);
         cooldowns.computeIfAbsent(playerId, k -> new HashMap<>()).put(cooldownName, expirationTime);

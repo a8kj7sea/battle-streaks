@@ -30,8 +30,6 @@ public interface PlayerAbilityManager {
 
     void unRegisterAbility(Player player);
 
-    boolean isAbilityOnCooldown(Player player);
-
     void saveAbilities(Player player);
 
     void loadAbilities(Player player);
