@@ -21,7 +21,7 @@ public class PlayerMoveListener extends PluginListener {
     public void onPlayerMove(PlayerMoveEvent event) {
 
         if (PluginFacade.getPlayersInLivesMode().contains(event.getPlayer().getUniqueId())) {
-            new PlayerActionBar(drawHearts(event.getPlayer())).execute(event.getPlayer());
+            new PlayerActionBar("\n\n         " + drawHearts(event.getPlayer())).execute(event.getPlayer());
         }
 
     }

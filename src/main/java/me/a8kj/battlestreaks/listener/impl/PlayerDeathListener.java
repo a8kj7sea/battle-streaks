@@ -58,8 +58,8 @@ public class PlayerDeathListener extends PluginListener {
                                         "&cyou are in the lives system!")
                                 .build());
             }
-            if ((killerStreaks + 1) % 4 == 0) {
-                int toDrop = killerStreaks / 4;
+            if ((killerStreaks + 1) % 4 == 0 && killerStreaks + 1 < 4) {
+                int toDrop = (int) Math.floor(killerStreaks / 4);
                 victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
                         new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
                                 .setAmount(toDrop)
