@@ -41,6 +41,11 @@ public abstract class RecipeCraftListener extends PluginListener {
         return item != null && item.getType() == material;
     }
 
+    protected boolean isItemStackInSlot(Inventory inventory, int slot, ItemStack target) {
+        ItemStack item = inventory.getItem(slot);
+        return item != null && item.isSimilar(target);
+    }
+
     @EventHandler
     public void onCraft(CraftItemEvent event) {
         ItemStack result = event.getCurrentItem();

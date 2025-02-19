@@ -22,6 +22,7 @@ public abstract class CustomInteractListener extends PluginListener {
 
     public abstract void execute(PlayerInteractEvent event, Player player);
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();

@@ -38,6 +38,7 @@ public class LifeCoreInteractListener extends CustomInteractListener {
 
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void execute(PlayerInteractEvent event, Player player) {
         // Add kill streak

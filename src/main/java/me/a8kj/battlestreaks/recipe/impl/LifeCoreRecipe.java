@@ -20,17 +20,26 @@ public class LifeCoreRecipe extends RecipeBase {
                                                 .build(),
                                 plugin);
 
-                setMetaData("name", name, plugin);
+        }
 
-                setPattern("WGW",
-                                "BTB",
-                                "ISI");
+        @Override
+        protected void init() {
 
                 setIngredient('W', Material.WITHER_SKELETON_SKULL);
                 setIngredient('G', Material.ENCHANTED_GOLDEN_APPLE);
                 setIngredient('B', Material.BLAZE_ROD);
                 setIngredient('I', Material.IRON_NUGGET);
                 setIngredient('T', Material.TOTEM_OF_UNDYING);
+                setIngredient('S', Material.NETHER_STAR);
+        }
+
+        @Override
+        protected void preInit() {
+                setMetaData("name", name, plugin);
+
+                setPattern("WGW",
+                                "BTB",
+                                "ISI");
         }
 
 }

@@ -14,6 +14,7 @@ public class PlayerInteractListener extends PluginListener {
 
     public PlayerInteractListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
+        this.register();
     }
 
     @EventHandler

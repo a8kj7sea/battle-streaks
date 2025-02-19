@@ -20,6 +20,7 @@ public class PlayerDeathListener extends PluginListener {
 
     public PlayerDeathListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
+        this.register();
     }
 
     @EventHandler
@@ -73,7 +74,7 @@ public class PlayerDeathListener extends PluginListener {
 
         // if vicitm streaks - 1 = 0 then enter him to lives mode and call event to
         // disable abilites and remove them and remove poitions
-        if (victimStreaks - 1 <= 0) {
+        if (victimStreaks - 1 <= 0 && !PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
             new PlayerActionBar(getMessage("enter-livesmode")).execute(victim);
             this.getPluginFacade().addPlayerToLivesMode(victim);
             setData(victim, PlayerDataType.STREAKS, 0);

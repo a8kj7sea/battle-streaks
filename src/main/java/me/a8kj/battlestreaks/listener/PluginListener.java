@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffect;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import me.a8kj.battlestreaks.ability.AbilityManager;
 import me.a8kj.battlestreaks.configuration.impl.DefaultConfig;
 import me.a8kj.battlestreaks.player.PlayerAbilityManager;
 import me.a8kj.battlestreaks.player.PlayerData;
@@ -27,6 +28,10 @@ public class PluginListener implements Listener {
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
+    }
+
+    public AbilityManager getAbilityManager() {
+        return this.getPluginFacade().getAbilityManager();
     }
 
     public String getMessage(String key) {

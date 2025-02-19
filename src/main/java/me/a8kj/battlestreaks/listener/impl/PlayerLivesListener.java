@@ -18,6 +18,7 @@ public class PlayerLivesListener extends PluginListener {
 
     public PlayerLivesListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
+        this.register();
     }
 
     @EventHandler
@@ -28,7 +29,7 @@ public class PlayerLivesListener extends PluginListener {
 
         if (status == null) {
 
-            if (lives == 5) {
+            if (lives == 4) {
                 if (getPluginFacade().getPlayerAbilityManager().hasAbility(player)) {
                     getPluginFacade().getPlayerAbilityManager().removeAbility(player);
                     getDataConfig().setData(player, PlayerDataType.ABILITY, "NONE");

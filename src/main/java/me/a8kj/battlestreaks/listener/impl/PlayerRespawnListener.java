@@ -12,6 +12,7 @@ public class PlayerRespawnListener extends PluginListener {
 
     public PlayerRespawnListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
+        this.register();
     }
 
     @EventHandler

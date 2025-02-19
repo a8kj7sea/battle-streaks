@@ -14,6 +14,7 @@ public class PlayerConnectionListeners extends PluginListener {
 
     public PlayerConnectionListeners(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
+        this.register();
     }
 
     private final ExecutorService pool = Executors.newCachedThreadPool();
@@ -38,11 +39,11 @@ public class PlayerConnectionListeners extends PluginListener {
                 getDataConfig().setData(event.getPlayer(), PlayerDataType.ABILITY, defaultAbility);
             } else {
                 // Check if the player has 4 or fewer lives and add them to Lives Mode
-                if (getDataConfig().getData(event.getPlayer(), PlayerDataType.LIVES, 4) <= 4) {
+                if (getDataConfig().getData(event.getPlayer(), PlayerDataType.LIVES, 4) <= 4
+                        && !PluginFacade.getPlayersInLivesMode().contains(event.getPlayer().getUniqueId())) {
                     // Ensure this logic is correct to manage players in lives mode
                     PluginFacade.getPlayersInLivesMode().add(event.getPlayer().getUniqueId());
 
-                    
                 }
             }
         });

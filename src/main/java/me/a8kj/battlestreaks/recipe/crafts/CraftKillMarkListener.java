@@ -70,6 +70,8 @@ public class CraftKillMarkListener extends RecipeCraftListener {
             ItemStack totemItem = inventory.getItem(7);
             if (ItemMetadataUtils.hasMetadata(totemItem, "totem_fragment", getPluginFacade().getPlugin()))
                 builder.append(true);
+            else
+                builder.append(false);
         } else {
             builder.append(false);
         }

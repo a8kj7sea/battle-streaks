@@ -20,14 +20,23 @@ public class TotemFragmentRecipe extends RecipeBase {
                                                 .build(),
                                 plugin);
 
+        }
+
+        @Override
+        protected void init() {
+
+                setIngredient('G', Material.GOLD_BLOCK);
+                setIngredient('T', Material.TOTEM_OF_UNDYING);
+
+        }
+
+        @Override
+        protected void preInit() {
                 setMetaData("name", name, plugin);
 
                 setPattern("GTG",
                                 "G G",
                                 "   ");
-                setIngredient('G', Material.GOLD_BLOCK);
-                setIngredient('T', Material.TOTEM_OF_UNDYING);
-
         }
 
 }

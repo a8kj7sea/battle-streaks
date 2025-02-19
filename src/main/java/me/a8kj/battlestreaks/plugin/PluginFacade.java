@@ -18,9 +18,18 @@ import me.a8kj.battlestreaks.ability.impl.DashOfFury;
 import me.a8kj.battlestreaks.ability.impl.EarthquakeSlam;
 import me.a8kj.battlestreaks.ability.impl.RampageSurge;
 import me.a8kj.battlestreaks.ability.impl.Thunderstrike;
+import me.a8kj.battlestreaks.command.ReloadConfigCommand;
 import me.a8kj.battlestreaks.configuration.Configuration;
 import me.a8kj.battlestreaks.configuration.impl.DataConfig;
 import me.a8kj.battlestreaks.configuration.impl.DefaultConfig;
+import me.a8kj.battlestreaks.listener.impl.PlayerActiveListener;
+import me.a8kj.battlestreaks.listener.impl.PlayerConnectionListeners;
+import me.a8kj.battlestreaks.listener.impl.PlayerDeathListener;
+import me.a8kj.battlestreaks.listener.impl.PlayerInteractListener;
+import me.a8kj.battlestreaks.listener.impl.PlayerKillStreakListener;
+import me.a8kj.battlestreaks.listener.impl.PlayerLivesListener;
+import me.a8kj.battlestreaks.listener.impl.PlayerMoveListener;
+import me.a8kj.battlestreaks.listener.impl.PlayerRespawnListener;
 import me.a8kj.battlestreaks.manager.AbilityManagerImpl;
 import me.a8kj.battlestreaks.manager.PlayerAbilityManagerImpl;
 import me.a8kj.battlestreaks.player.PlayerAbilityManager;
@@ -51,14 +60,19 @@ public class PluginFacade {
         onPreLunch();
     }
 
-    public void onPreLunch() {
+    private void onPreLunch() {
         registerConfigurations();
         registerRecipes();
-        registerCraftRecipeListeners();
+        registerRecipeListeners();
         registerListeners();
         registerCommands();
         registerAbilities();
         playerAbilityManager = new PlayerAbilityManagerImpl(abilityManager);
+        registerListeners();
+    }
+
+    public void onStop() {
+
     }
 
     public void addPlayerToLivesMode(Player player) {
@@ -78,22 +92,26 @@ public class PluginFacade {
         this.abilityManager.registerAbility(new Thunderstrike());
     }
 
-    public void onStop() {
-
-    }
-
     private void registerCommands() {
-
+        this.plugin.getCommand("bsreload").setExecutor(new ReloadConfigCommand(this));
     }
 
     private void registerListeners() {
-
+        new PlayerActiveListener(this);
+        new PlayerConnectionListeners(this);
+        new PlayerDeathListener(this);
+        new PlayerInteractListener(this);
+        new PlayerKillStreakListener(this);
+        new PlayerLivesListener(this);
+        new PlayerMoveListener(this);
+        new PlayerRespawnListener(this);
     }
 
-    private void registerCraftRecipeListeners() {
+    private void registerRecipeListeners() {
         new CraftKillMarkListener(this);
         new CraftTotemFragmentListener(this);
         new CraftKillMarkListener(this);
+
         new KillMarksInteractListener(this);
         new LifeCoreInteractListener(this);
     }

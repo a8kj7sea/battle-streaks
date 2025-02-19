@@ -34,10 +34,17 @@ public abstract class RecipeBase implements Recipe {
 
     @Override
     public void register() {
+        preInit();
         this.recipe = new ShapedRecipe(new NamespacedKey(plugin, name), result);
         this.recipe.shape(pattern);
+        init();
         this.plugin.getServer().addRecipe(this.recipe);
+
     }
+
+    protected abstract void preInit();
+
+    protected abstract void init();
 
     @Override
     public void setMetaData(String key, String value, Plugin plugin) {

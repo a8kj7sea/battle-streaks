@@ -16,6 +16,7 @@ public class PlayerKillStreakListener extends PluginListener {
 
     public PlayerKillStreakListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
+        this.register();
     }
 
     @EventHandler
@@ -27,7 +28,8 @@ public class PlayerKillStreakListener extends PluginListener {
         PlayerAbilityManager playerAbilityManager = this.getPluginFacade().getPlayerAbilityManager();
 
         if (status == KillStreakStatus.ACHIEVED || status == KillStreakStatus.LOST) {
-            applyKillstreakAbility(player, playerAbilityManager, streaks);
+            // applyKillstreakAbility(player, playerAbilityManager, streaks);
+            playerAbilityManager.registerAbility(player, getAbilityManager().getAbility("dash"));
         }
     }
 

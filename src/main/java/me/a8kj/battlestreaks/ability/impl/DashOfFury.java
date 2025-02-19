@@ -14,10 +14,7 @@ public class DashOfFury extends AbilityBase {
 
     @Override
     public void activate(Player player) {
-        if (isReady(player)) {
-            // player.moveForward(); // Add your movement logic here
-            cooldown = 30;
-        }
+       player.chat("Zbreeeeeeeeeeee active!");
     }
 
     @Override

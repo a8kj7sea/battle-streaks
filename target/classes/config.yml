@@ -16,37 +16,39 @@ abilities:
   - minStreak: 1
     maxStreak: 3
     ability: dash
-    message: "🔥 You have taken Dash of Fury!"
+    message: "&6🔥 You have taken Dash of Fury!"
 
   - minStreak: 3
     maxStreak: 5
     ability: charged_strike
-    message: "⚡ Charged Strike unlocked!"
+    message: "&b⚡ Charged Strike unlocked!"
 
   - minStreak: 5
     maxStreak: 7
     ability: earthquake_slam
-    message: "🌍 Earthquake Slam activated!"
+    message: "&3🌍 Earthquake Slam activated!"
 
   - minStreak: 7
     maxStreak: 9
     ability: rampage_surge
-    message: "💖 Extra hearts & healing granted!"
+    message: "&2💖 Extra hearts & healing granted!"
 
   - minStreak: 9
     maxStreak: 12
     ability: thunderstrike
-    message: "⚡ Thunderstrike unleashed!"
+    message: "&d⚡ Thunderstrike unleashed!"
 
   - minStreak: 12
     maxStreak: 999
     ability: blinding_burst
-    message: "✨ Ultimate Blinding Burst activated!"
+    message: "&e✨ Ultimate Blinding Burst activated!"
+
+
 # ==============================================
 # ❤️ Lives System - Effects Based on Remaining Lives
 # ==============================================
 lives-system:
-  - at: 5
+  - at: 4
     effect: "slowness" # Effect applied when a player has 5 lives
     message: "🚀 You feel lighter on your feet!"
 
