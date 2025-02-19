@@ -1,60 +1,72 @@
 package me.a8kj.battlestreaks.ability.impl;
 
-import org.bukkit.entity.Player;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
-public class Thunderstrike extends AbilityBase {
-    public Thunderstrike() {
-        super("thunderstrike");
-    }
+import java.util.List;
 
-    private int cooldown = 200;
+public class Thunderstrike extends AbilityBase {
+
+    private static final double RADIUS = 20.0; // Radius of the AoE effect
+    private static final int DAMAGE = 6; // Damage dealt to players (3 hearts = 6 points)
+    private static final int STUN_DURATION = 60; // Duration of the slowness effect in ticks (3 seconds)
+    private static final int NAUSEA_DURATION = 60; // Duration of the nausea effect in ticks (3 seconds)
+
+    public Thunderstrike(String name, CooldownTime cooldownTime) {
+        super(name,
+                "Summon a lightning bolt every 200 seconds, dealing 3 hearts of true damage and stunning all players within a 20-block radius.",
+                cooldownTime);
+    }
 
     @Override
     public void activate(Player player) {
-        if (isReady(player)) {
-            for (Entity entity : player.getNearbyEntities(20, 20, 20)) {
-                if (entity instanceof Player) {
-                    Player target = (Player) entity;
-                    target.damage(6);
-                    target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 100, 2));
-                    target.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, 100, 1));
-                }
+        // Get the player's location
+        Location location = player.getLocation();
+
+        // Summon a lightning bolt at the player's location
+        player.getWorld().strikeLightning(location);
+
+        // Find all players in the radius
+        List<Entity> nearbyEntities = player.getNearbyEntities(RADIUS, RADIUS, RADIUS);
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof Player && entity != player) {
+                Player targetPlayer = (Player) entity;
+
+                // Deal true damage to the player
+                targetPlayer.damage(DAMAGE, player);
+
+                // Apply slowness effect
+                targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, STUN_DURATION, 1)); // Slowness
+                                                                                                             // II
+
+                // Apply nausea effect
+                targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, NAUSEA_DURATION, 0)); // Nausea
             }
-            // You can also make a lightning effect here if needed
-            cooldown = 200;
         }
+
+        // Optional: create a knockback effect
+        for (Entity entity : nearbyEntities) {
+            if (entity instanceof Player && entity != player) {
+                Player targetPlayer = (Player) entity;
+                Vector direction = targetPlayer.getLocation().subtract(location).toVector().normalize();
+                targetPlayer.setVelocity(direction.multiply(-1).setY(0.5)); // Knockback upwards
+            }
+        }
+
+        // Optional notification to the player
+        player.sendMessage("You summoned a Thunderstrike!");
     }
 
     @Override
     public void deactivate(Player player) {
-        System.out.println("Thunderstrike deactivated.");
-    }
-
-    @Override
-    public boolean isReady(Player player) {
-        return cooldown == 0;
-    }
-
-    @Override
-    public void update(Player player) {
-        if (cooldown > 0) {
-            cooldown--;
-        }
-    }
-
-    @Override
-    public String getDescription() {
-        return "Summon a powerful lightning strike to deal damage and stun enemies in a 20-block radius.";
-    }
-
-    @Override
-    public CooldownTime getCooldownTime() {
-        return new CooldownTime(0, 200);
+        // No specific deactivation logic needed for this ability
+        // However, you can add any cleanup or state management here if needed
     }
 }

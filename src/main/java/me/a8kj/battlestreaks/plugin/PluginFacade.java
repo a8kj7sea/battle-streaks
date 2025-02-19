@@ -55,6 +55,7 @@ public class PluginFacade {
     private final NegativeEffectManager effectManager = new NegativeEffectManagerImpl();
     private Configuration defaultConfiguration;
     private Configuration dataConfiguration;
+    
 
     @Getter
     private static Set<UUID> playersInLivesMode = Sets.newHashSet();

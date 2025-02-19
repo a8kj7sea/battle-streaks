@@ -7,9 +7,12 @@ import me.a8kj.battlestreaks.player.PlayerAbilityManager;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
@@ -104,5 +107,15 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
     public Optional<AbilityBase> getAbility(Player player) {
         return Optional.ofNullable(playerAbilities.get(player.getUniqueId()))
                 .flatMap(abilityManager::getAbility);
+    }
+
+    @Override
+    public Set<UUID> getPlayersWithAbilityByName(String name) {
+        String lowerName = name.toLowerCase();
+
+        return playerAbilities.entrySet().stream()
+                .filter(entry -> entry.getValue().toLowerCase().equals(lowerName))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 }

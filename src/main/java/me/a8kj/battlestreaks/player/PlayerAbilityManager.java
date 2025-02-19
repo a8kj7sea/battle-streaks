@@ -3,6 +3,8 @@ package me.a8kj.battlestreaks.player;
 import me.a8kj.battlestreaks.ability.AbilityBase;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
@@ -35,5 +37,7 @@ public interface PlayerAbilityManager {
     void loadAbilities(Player player);
 
     Optional<AbilityBase> getAbility(Player player);
+
+    Set<UUID> getPlayersWithAbilityByName(String name);
 
 }

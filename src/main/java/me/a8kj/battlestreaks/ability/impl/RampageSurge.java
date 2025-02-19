@@ -4,50 +4,42 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import lombok.Getter;
 import me.a8kj.battlestreaks.ability.AbilityBase;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
+import me.a8kj.battlestreaks.plugin.PluginFacade;
 
+@Getter
 public class RampageSurge extends AbilityBase {
-    public RampageSurge() {
-        super("rampage_surge");
+
+    private final PluginFacade pluginFacade;
+
+    public RampageSurge(String name, CooldownTime cooldownTime, PluginFacade pluginFacade) {
+        super(name, "Boost your strength and speed while healing 3 hearts instantly.", cooldownTime);
+        this.pluginFacade = pluginFacade;
     }
 
-    private int cooldown = 10;
-
+    @SuppressWarnings("deprecation")
     @Override
     public void activate(Player player) {
-        if (isReady(player)) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 200, 1)); // Increase Strength
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1)); // Increase Speed
-            player.setHealth(player.getHealth() + 6); // Heal 3 hearts
-            cooldown = 10;
-        }
+        // Heal the player for 3 hearts (6 health points)
+        player.setHealth(Math.min(player.getHealth() + 6, player.getMaxHealth()));
+
+        // Apply Strength effect
+        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, 200, 1)); // 10 seconds (200 ticks) of
+                                                                                     // Strength II
+
+        // Apply Speed effect
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1)); // 10 seconds (200 ticks) of Speed II
+
+        player.sendMessage("You are in Rampage Surge!"); // Optional notification
     }
 
     @Override
     public void deactivate(Player player) {
-        System.out.println("Rampage Surge deactivated.");
-    }
-
-    @Override
-    public boolean isReady(Player player) {
-        return cooldown == 0;
-    }
-
-    @Override
-    public void update(Player player) {
-        if (cooldown > 0) {
-            cooldown--;
-        }
-    }
-
-    @Override
-    public String getDescription() {
-        return "Boost your strength and speed while healing 3 hearts instantly, every 10 seconds.";
-    }
-
-    @Override
-    public CooldownTime getCooldownTime() {
-        return new CooldownTime(0, 10);
+        // Remove potion effects
+        player.removePotionEffect(PotionEffectType.STRENGTH);
+        player.removePotionEffect(PotionEffectType.SPEED);
+        player.sendMessage("Rampage Surge has been deactivated."); // Optional notification
     }
 }

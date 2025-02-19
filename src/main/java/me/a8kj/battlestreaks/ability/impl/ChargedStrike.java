@@ -3,6 +3,7 @@ package me.a8kj.battlestreaks.ability.impl;
 import org.bukkit.entity.Player;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 
@@ -17,14 +18,13 @@ public class ChargedStrike extends AbilityBase {
 
     @Override
     public void activate(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'activate'");
+        this.pluginFacade.getPlayerAbilityManager().registerAbility(player, "charged_strike");
+        new PlayerActionBar("&6You have activated Charged Strike!").execute(player);
     }
 
     @Override
     public void deactivate(Player player) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deactivate'");
+        this.pluginFacade.getPlayerAbilityManager().removeAbility(player);
+        new PlayerActionBar("You have deactivated Charged Strike!").execute(player);
     }
-
 }
