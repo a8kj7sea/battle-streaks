@@ -39,6 +39,8 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
 
         if (optionalAbility.isPresent()) {
             AbilityBase ability = optionalAbility.get();
+            PlayerData playerData = (PlayerData) this.pluginFacade.getDataConfiguration();
+            playerData.setData(player, PlayerDataType.ABILITY, abilityName.toLowerCase());
             ability.activate(player);
         } else {
             player.sendMessage("Ability not found!");

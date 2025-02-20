@@ -42,7 +42,7 @@ public class PlayerDeathListener extends PluginListener {
                 setData(victim, PlayerDataType.STREAKS, 0);
                 setData(victim, PlayerDataType.LIVES, 5);
                 new PlayerLivesEvent(victim, 5, null).callEvent();
-                return;
+                
             } else {
                 int toDrop = Math.max(1, (int) Math.floor(victimStreaks / 4));
                 if (victimStreaks >= 4) {
@@ -58,7 +58,7 @@ public class PlayerDeathListener extends PluginListener {
                     new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
                     removeData(victim, PlayerDataType.STREAKS, 1);
                     new PlayerActionBar("&4&l- 1 Streak!").execute(victim);
-                    return;
+                    
                 } else {
                     victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
                             new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
@@ -72,20 +72,20 @@ public class PlayerDeathListener extends PluginListener {
                     new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
                     removeData(victim, PlayerDataType.STREAKS, 1);
                     new PlayerActionBar("&4&l- 1 Streak!").execute(victim);
-                    return;
+                    
                 }
             }
         } else {
             if (victimLives - 1 == 0 || victimLives == 0) {
                 new PlayerLivesEvent(victim, 0, null).callEvent();
                 setData(victim, PlayerDataType.LIVES, 0);
-                return;
+                
             }
             if (victimLives <= 5) {
                 new PlayerLivesEvent(victim, victimLives - 1, LivesStatus.LOST).callEvent();
                 removeData(victim, PlayerDataType.LIVES, 1);
                 new PlayerActionBar("&f&l- 1 Live!").execute(victim);
-                return;
+                
             }
         }
 
@@ -94,19 +94,19 @@ public class PlayerDeathListener extends PluginListener {
                 new PlayerKillStreakEvent(killer, killerStreaks + 1, KillStreakStatus.ACHIEVED).callEvent();
                 addData(killer, PlayerDataType.STREAKS, 1);
                 new PlayerActionBar("&2&l+ 1 Streak!").execute(killer);
-                return;
+                
             }
         } else {
             if (killerLives + 1 > 5) {
                 getPluginFacade().removePlayerFromLivesMode(killer);
                 setData(killer, PlayerDataType.LIVES, 5);
                 new PlayerActionBar("&1Wooosh you had left lives mode !").execute(killer);
-                return;
+                
             } else {
                 new PlayerLivesEvent(killer, killerLives + 1, LivesStatus.ACHIEVED).callEvent();
                 addData(killer, PlayerDataType.LIVES, 1);
                 new PlayerActionBar("&d&l+ 1 Live!").execute(killer);
-                return;
+                
             }
         }
 

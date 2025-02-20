@@ -39,7 +39,7 @@ public class PlayerConnectionListeners extends PluginListener {
                 setDefaultData(event.getPlayer());
             }
 
-            int lives = getDataConfig().getData(event.getPlayer(), PlayerDataType.LIVES, 4);
+            int lives = getDataConfig().getData(event.getPlayer(), PlayerDataType.LIVES, 6);
             if (lives > 4)
                 return;
 
@@ -54,7 +54,7 @@ public class PlayerConnectionListeners extends PluginListener {
     }
 
     private void setDefaultData(org.bukkit.entity.Player player) {
-        getDataConfig().setData(player, PlayerDataType.LIVES, 5);
+        getDataConfig().setData(player, PlayerDataType.LIVES, 6);
         getDataConfig().setData(player, PlayerDataType.STREAKS, 0);
         getDataConfig().setData(player, PlayerDataType.KILL_MARKS, 0);
         getDataConfig().setData(player, PlayerDataType.ABILITY, "NONE");

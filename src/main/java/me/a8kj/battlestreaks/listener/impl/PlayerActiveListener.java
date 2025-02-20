@@ -26,6 +26,7 @@ public class PlayerActiveListener extends PluginListener {
         Player player = event.getPlayer();
 
         if (!getPlayerAbilityManager().hasAbility(player)) {
+            System.err.println("no ability!");
             return;
         }
 

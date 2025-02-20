@@ -28,6 +28,7 @@ import me.a8kj.battlestreaks.listener.impl.EntityDamageByEntityListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerActiveListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerConnectionListeners;
 import me.a8kj.battlestreaks.listener.impl.PlayerDeathListener;
+import me.a8kj.battlestreaks.listener.impl.PlayerEffectAppliedListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerInteractListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerKillStreakListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerLivesListener;
@@ -119,7 +120,7 @@ public class PluginFacade {
         new PlayerLivesListener(this);
         new PlayerMoveListener(this);
         new PlayerRespawnListener(this);
-        new PlayerDeathListener(this);
+        new PlayerEffectAppliedListener(this);
         new EntityDamageByEntityListener(this);
     }
 
