@@ -25,24 +25,21 @@ public class PlayerDeathListener extends PluginListener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
-        Player victim = event.getEntity().getPlayer();
-        Player killer = event.getEntity().getKiller();
+        Player victim = event.getEntity();
+        Player killer = victim.getKiller();
 
-        if (victim == null || killer == null)
-            return;
+        if (victim == null || killer == null) return;
 
-        final int victimStreaks = getStreaks(victim);
-        final int victimLives = getLives(victim);
+        int victimStreaks = getStreaks(victim);
+        int victimLives = getLives(victim);
+        int killerStreaks = getStreaks(killer);
+        int killerLives = getLives(killer);
 
-        final int killerStreaks = getStreaks(killer);
-        final int killerLives = getLives(killer);
-
-        // إذا لم يكن اللاعبان في وضع الحياة
         if (!PluginFacade.getPlayersInLivesMode().contains(killer.getUniqueId())
                 && !PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
+
             removeData(victim, PlayerDataType.STREAKS, 1);
             addData(killer, PlayerDataType.STREAKS, 1);
-
             new PlayerKillStreakEvent(killer, killerStreaks + 1, KillStreakStatus.ACHIEVED).callEvent();
             new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
 
@@ -55,12 +52,10 @@ public class PlayerDeathListener extends PluginListener {
                 return;
             }
 
-            // إذا كان القاتل في وضع الحياة وحصل على قتل
             if (PluginFacade.getPlayersInLivesMode().contains(killer.getUniqueId())) {
                 addData(killer, PlayerDataType.LIVES, 1);
                 new PlayerLivesEvent(killer, killerLives + 1, LivesStatus.ACHIEVED).callEvent();
 
-                // إذا كان القاتل لديه 5 أو أكثر من الحياة
                 if (killerLives + 1 > 5) {
                     getPluginFacade().removePlayerFromLivesMode(killer);
                     removePlayerEffects(killer);
@@ -69,36 +64,22 @@ public class PlayerDeathListener extends PluginListener {
                 }
             }
 
-            // إذا كان الضحية في وضع الحياة وخسر حياة
             if (PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
                 removeData(victim, PlayerDataType.LIVES, 1);
                 new PlayerLivesEvent(victim, victimLives - 1, LivesStatus.LOST).callEvent();
                 return;
             }
 
-            // إضافة علامات القتل
-            int toDrop = (int) Math.floor(killerStreaks / 4);
-            if (toDrop > 0) {
-                victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
-                        new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
-                                .setAmount(toDrop)
-                                .setDisplayName("&4Kill Mark")
-                                .setLore("&7A mark of death, infused",
-                                        "&7with dark energy.",
-                                        "&cCannot be used while",
-                                        "&cyou are in the lives system!")
-                                .build());
-            } else {
-                victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
-                        new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
-                                .setAmount(1)
-                                .setDisplayName("&4Kill Mark")
-                                .setLore("&7A mark of death, infused",
-                                        "&7with dark energy.",
-                                        "&cCannot be used while",
-                                        "&cyou are in the lives system!")
-                                .build());
-            }
+            int toDrop = Math.max(1, (int) Math.floor(killerStreaks / 4));
+            victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
+                    new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
+                            .setAmount(toDrop)
+                            .setDisplayName("&4Kill Mark")
+                            .setLore("&7A mark of death, infused",
+                                    "&7with dark energy.",
+                                    "&cCannot be used while",
+                                    "&cyou are in the lives system!")
+                            .build());
         }
     }
 

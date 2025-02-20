@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import lombok.NonNull;
 import me.a8kj.battlestreaks.api.player.impl.PlayerEffectAppliedEvent;
@@ -24,9 +25,18 @@ public class PlayerConnectionListeners extends PluginListener {
     @EventHandler
     public void onLogin(PlayerLoginEvent event) {
         pool.execute(() -> {
+            // This can handle any initial data checks before the player joins
             if (!getDataConfig().contains(event.getPlayer())) {
                 setDefaultData(event.getPlayer());
-                return;
+            }
+        });
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        pool.execute(() -> {
+            if (!getDataConfig().contains(event.getPlayer())) {
+                setDefaultData(event.getPlayer());
             }
 
             int lives = getDataConfig().getData(event.getPlayer(), PlayerDataType.LIVES, 4);
@@ -39,7 +49,7 @@ public class PlayerConnectionListeners extends PluginListener {
                     .filter(e -> e.getRequiredLives() == lives)
                     .findFirst();
 
-            effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e));
+            effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e).callEvent());
         });
     }
 

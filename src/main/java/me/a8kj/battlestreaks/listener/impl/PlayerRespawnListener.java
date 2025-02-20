@@ -35,7 +35,7 @@ public class PlayerRespawnListener extends PluginListener {
                         .filter(e -> e.getRequiredLives() == lives)
                         .findFirst();
 
-                effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e));
+                effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e).callEvent());
             }
         }
     }
