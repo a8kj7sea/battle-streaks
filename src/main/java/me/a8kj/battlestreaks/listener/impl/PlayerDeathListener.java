@@ -28,14 +28,13 @@ public class PlayerDeathListener extends PluginListener {
         Player victim = event.getEntity();
         Player killer = victim.getKiller();
 
-        if (victim == null || killer == null)
-            return;
+        
 
-        int victimStreaks = getStreaks(victim);
-        int victimLives = getLives(victim);
+        final int victimStreaks = getStreaks(victim);
+        final int victimLives = getLives(victim);
         ///////////////////////////
-        int killerStreaks = getStreaks(killer);
-        int killerLives = getLives(killer);
+        final int killerStreaks = getStreaks(killer);
+        final int killerLives = getLives(killer);
 
         if (!PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
             if (victimStreaks - 1 == 0 || victimStreaks == 0) {
