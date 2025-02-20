@@ -37,16 +37,18 @@ public abstract class Configuration {
             if (saveDefaultData) {
                 try {
                     plugin.saveResource(file.getName(), saveDefaultData);
-                    logger.info("Default config file created: " + file.getName());
+                    // logger.info("Default config file created: " + file.getName());
                 } catch (Exception e) {
-                    logger.log(Level.SEVERE, "Failed to save default config file: " + file.getName(), e);
+                    // logger.log(Level.SEVERE, "Failed to save default config file: " +
+                    // file.getName(), e);
                 }
             } else {
                 try {
                     file.createNewFile();
-                    logger.info("Config file created: " + file.getName());
+                    // logger.info("Config file created: " + file.getName());
                 } catch (IOException e) {
-                    logger.log(Level.SEVERE, "Failed to create config file: " + file.getName(), e);
+                    // logger.log(Level.SEVERE, "Failed to create config file: " + file.getName(),
+                    // e);
                 }
             }
         }
@@ -55,15 +57,15 @@ public abstract class Configuration {
     public void save() {
         try {
             configurationFile.save(file);
-            logger.info("Config file saved: " + file.getName());
+            // logger.info("Config file saved: " + file.getName());
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Failed to save config file: " + file.getName(), e);
+            // logger.log(Level.SEVERE, "Failed to save config file: " + file.getName(), e);
         }
     }
 
     public void load() {
         configurationFile = YamlConfiguration.loadConfiguration(file);
-        logger.info("Config file loaded: " + file.getName());
+        // logger.info("Config file loaded: " + file.getName());
     }
 
     public YamlConfiguration getYamConfiguration() {

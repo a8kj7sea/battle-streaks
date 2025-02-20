@@ -17,7 +17,7 @@ public class PlayerKillStreakListener extends PluginListener {
 
     public PlayerKillStreakListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
-        this.register();
+        
     }
 
     @EventHandler
@@ -31,7 +31,6 @@ public class PlayerKillStreakListener extends PluginListener {
         if (status == KillStreakStatus.ACHIEVED || status == KillStreakStatus.LOST) {
             getAbilityNameByStreaks(streaks).flatMap(name -> getAbilityManager().getAbility(name))
                     .ifPresent(ability -> playerAbilityManager.replaceAbility(player, ability));
-            playerAbilityManager.activatePlayerAbility(player);
         }
     }
 

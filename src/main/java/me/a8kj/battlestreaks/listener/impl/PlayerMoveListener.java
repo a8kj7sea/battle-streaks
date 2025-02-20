@@ -14,7 +14,7 @@ public class PlayerMoveListener extends PluginListener {
 
     public PlayerMoveListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
-        this.register();
+        
     }
 
     @EventHandler

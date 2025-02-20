@@ -2,6 +2,7 @@ package me.a8kj.battlestreaks.listener.impl;
 
 import java.util.Optional;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import lombok.NonNull;
@@ -17,7 +18,7 @@ public class PlayerLivesListener extends PluginListener {
 
     public PlayerLivesListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
-        this.register();
+
     }
 
     @EventHandler
@@ -31,12 +32,14 @@ public class PlayerLivesListener extends PluginListener {
                 getPluginFacade().getPlayerAbilityManager().removeAbility(player);
                 getDataConfig().setData(player, PlayerDataType.ABILITY, "NONE");
             }
-            removePlayerEffects(player);
-            Optional<NegativeEffect> effect = getEffectManager().getEffectMap().values().stream()
-                    .filter(e -> e.getRequiredLives() == lives)
-                    .findFirst();
 
-            effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e).callEvent());
+            Bukkit.getScheduler().runTask(getPluginFacade().getPlugin(), () -> {
+                removePlayerEffects(player);
+                Optional<NegativeEffect> effect = getEffectManager().getEffectMap().values().stream()
+                        .filter(e -> e.getRequiredLives() == lives)
+                        .findFirst();
+                effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e).callEvent());
+            });
         }
 
     }

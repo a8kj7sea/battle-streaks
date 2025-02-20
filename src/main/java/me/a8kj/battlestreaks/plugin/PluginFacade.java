@@ -27,7 +27,6 @@ import me.a8kj.battlestreaks.effect.NegativeEffectManager;
 import me.a8kj.battlestreaks.listener.impl.EntityDamageByEntityListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerActiveListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerConnectionListeners;
-import me.a8kj.battlestreaks.listener.impl.PlayerDeathListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerEffectAppliedListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerInteractListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerKillStreakListener;
@@ -78,11 +77,7 @@ public class PluginFacade {
     }
 
     public void onStop() {
-        defaultConfiguration.save();
-        dataConfiguration.save();
-        effectManager.clear();
-        playerAbilityManager = null;
-        playersInLivesMode.clear();
+       
     }
 
     public void addPlayerToLivesMode(Player player) {
@@ -98,7 +93,7 @@ public class PluginFacade {
                 new BlindingBurst("blinding_burst", new CooldownTime(0, 60), 999, 12));
         this.abilityManager.registerAbility("charged_strike",
                 new ChargedStrike("charged_strike", new CooldownTime(0, 60), 5, 3, this));
-        this.abilityManager.registerAbility("dash", new DashOfFury("dash", new CooldownTime(0, 30), this, 3, 1));
+        this.abilityManager.registerAbility("dash", new DashOfFury("dash", new CooldownTime(0, 30), this, 1, 3));
         this.abilityManager.registerAbility("earthquake_slam",
                 new EarthquakeSlam("earthquake_slam", new CooldownTime(0, 70), 7, 5, this));
         this.abilityManager.registerAbility("rampage_surge",
@@ -112,16 +107,16 @@ public class PluginFacade {
     }
 
     private void registerListeners() {
-        new PlayerActiveListener(this);
-        new PlayerConnectionListeners(this);
-        new PlayerDeathListener(this);
-        new PlayerInteractListener(this);
-        new PlayerKillStreakListener(this);
-        new PlayerLivesListener(this);
-        new PlayerMoveListener(this);
-        new PlayerRespawnListener(this);
-        new PlayerEffectAppliedListener(this);
-        new EntityDamageByEntityListener(this);
+        new PlayerActiveListener(this).register();
+        new PlayerConnectionListeners(this).register();
+        //
+        new PlayerInteractListener(this).register();
+        new PlayerKillStreakListener(this).register();
+        new PlayerLivesListener(this).register();
+        new PlayerMoveListener(this).register();
+        new PlayerRespawnListener(this).register();
+        new PlayerEffectAppliedListener(this).register();
+        new EntityDamageByEntityListener(this).register();
     }
 
     private void registerRecipeListeners() {

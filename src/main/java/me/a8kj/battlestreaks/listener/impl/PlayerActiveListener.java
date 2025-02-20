@@ -18,7 +18,7 @@ public class PlayerActiveListener extends PluginListener {
 
     public PlayerActiveListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
-        this.register();
+        
     }
 
     @EventHandler
@@ -26,7 +26,7 @@ public class PlayerActiveListener extends PluginListener {
         Player player = event.getPlayer();
 
         if (!getPlayerAbilityManager().hasAbility(player)) {
-            System.err.println("no ability!");
+            player.sendMessage("no ability!");
             return;
         }
 

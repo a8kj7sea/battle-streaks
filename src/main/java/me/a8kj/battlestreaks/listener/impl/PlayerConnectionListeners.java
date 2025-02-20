@@ -3,6 +3,8 @@ package me.a8kj.battlestreaks.listener.impl;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -19,7 +21,7 @@ public class PlayerConnectionListeners extends PluginListener {
 
     public PlayerConnectionListeners(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
-        this.register();
+
     }
 
     @EventHandler
@@ -45,11 +47,12 @@ public class PlayerConnectionListeners extends PluginListener {
 
             PluginFacade.getPlayersInLivesMode().add(event.getPlayer().getUniqueId());
 
-            Optional<NegativeEffect> effect = getEffectManager().getEffectMap().values().stream()
-                    .filter(e -> e.getRequiredLives() == lives)
-                    .findFirst();
-
-            effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e).callEvent());
+            Bukkit.getScheduler().runTask(getPluginFacade().getPlugin(), () -> {
+                Optional<NegativeEffect> effect = getEffectManager().getEffectMap().values().stream()
+                        .filter(e -> e.getRequiredLives() == lives)
+                        .findFirst();
+                effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e).callEvent());
+            });
         });
     }
 

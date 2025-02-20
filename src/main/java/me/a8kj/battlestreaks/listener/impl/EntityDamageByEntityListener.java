@@ -19,7 +19,7 @@ public class EntityDamageByEntityListener extends PluginListener {
 
     public EntityDamageByEntityListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
-        this.register();
+        
     }
 
     @EventHandler

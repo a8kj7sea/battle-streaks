@@ -3,24 +3,30 @@ package me.a8kj.battlestreaks.listener.impl;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import lombok.Getter;
 import lombok.NonNull;
 import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
 import me.a8kj.battlestreaks.api.player.impl.PlayerKillStreakEvent;
 import me.a8kj.battlestreaks.api.player.impl.PlayerLivesEvent;
 import me.a8kj.battlestreaks.api.player.impl.PlayerKillStreakEvent.KillStreakStatus;
 import me.a8kj.battlestreaks.api.player.impl.PlayerLivesEvent.LivesStatus;
-import me.a8kj.battlestreaks.listener.PluginListener;
+import me.a8kj.battlestreaks.player.PlayerData;
 import me.a8kj.battlestreaks.player.properties.PlayerDataType;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 import me.a8kj.battlestreaks.util.ItemStackBuilder;
 
-public class PlayerDeathListener extends PluginListener {
+public class PlayerDeathListener implements Listener {
+
+    private final PluginFacade pluginFacade;
+    @Getter
+    private final PlayerData dataConfig;
 
     public PlayerDeathListener(@NonNull PluginFacade pluginFacade) {
-        super(pluginFacade);
-        this.register();
+        this.pluginFacade = pluginFacade;
+        dataConfig = (PlayerData) pluginFacade.getDataConfiguration();
     }
 
     @EventHandler
@@ -28,107 +34,74 @@ public class PlayerDeathListener extends PluginListener {
         Player victim = event.getEntity();
         Player killer = victim.getKiller();
 
-        
+        if (killer == null || victim == null)
+            return; // منع التنفيذ إذا لم يكن هناك قاتل
 
-        final int victimStreaks = getStreaks(victim);
-        final int victimLives = getLives(victim);
-        ///////////////////////////
-        final int killerStreaks = getStreaks(killer);
-        final int killerLives = getLives(killer);
+        handleVictimDeath(victim);
+        handleKillerStreak(killer);
+    }
+
+    private void handleVictimDeath(Player victim) {
+        final int victimStreaks = getDataConfig().getData(victim, PlayerDataType.STREAKS, 0);
+
+        final int victimLives = getDataConfig().getData(victim, PlayerDataType.LIVES, 0);
 
         if (!PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
-            if (victimStreaks - 1 == 0 || victimStreaks == 0) {
-                getPluginFacade().addPlayerToLivesMode(victim);
-                setData(victim, PlayerDataType.STREAKS, 0);
-                setData(victim, PlayerDataType.LIVES, 5);
+            if (victimStreaks <= 1) {
+                pluginFacade.addPlayerToLivesMode(victim);
+                getDataConfig().setData(victim, PlayerDataType.STREAKS, 0);
+                getDataConfig().setData(victim, PlayerDataType.LIVES, 5);
                 new PlayerLivesEvent(victim, 5, null).callEvent();
-                
-            } else {
-                int toDrop = Math.max(1, (int) Math.floor(victimStreaks / 4));
-                if (victimStreaks >= 4) {
-                    victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
-                            new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
-                                    .setAmount(toDrop)
-                                    .setDisplayName("&4Kill Mark")
-                                    .setLore("&7A mark of death, infused",
-                                            "&7with dark energy.",
-                                            "&cCannot be used while",
-                                            "&cyou are in the lives system!")
-                                    .build());
-                    new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
-                    removeData(victim, PlayerDataType.STREAKS, 1);
-                    new PlayerActionBar("&4&l- 1 Streak!").execute(victim);
-                    
-                } else {
-                    victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
-                            new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
-                                    .setAmount(toDrop)
-                                    .setDisplayName("&4Kill Mark")
-                                    .setLore("&7A mark of death, infused",
-                                            "&7with dark energy.",
-                                            "&cCannot be used while",
-                                            "&cyou are in the lives system!")
-                                    .build());
-                    new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
-                    removeData(victim, PlayerDataType.STREAKS, 1);
-                    new PlayerActionBar("&4&l- 1 Streak!").execute(victim);
-                    
-                }
+                return;
             }
+            dropKillMark(victim, victimStreaks);
+            new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
+            getDataConfig().removeData(victim, PlayerDataType.STREAKS, 1);
+            new PlayerActionBar("&4&l- 1 Streak!").execute(victim);
         } else {
-            if (victimLives - 1 == 0 || victimLives == 0) {
+            if (victimLives <= 1) {
                 new PlayerLivesEvent(victim, 0, null).callEvent();
-                setData(victim, PlayerDataType.LIVES, 0);
-                
+                getDataConfig().setData(victim, PlayerDataType.LIVES, 0);
+                return;
             }
-            if (victimLives <= 5) {
-                new PlayerLivesEvent(victim, victimLives - 1, LivesStatus.LOST).callEvent();
-                removeData(victim, PlayerDataType.LIVES, 1);
-                new PlayerActionBar("&f&l- 1 Live!").execute(victim);
-                
-            }
+            new PlayerLivesEvent(victim, victimLives - 1, LivesStatus.LOST).callEvent();
+            getDataConfig().removeData(victim, PlayerDataType.LIVES, 1);
+            new PlayerActionBar("&f&l- 1 Live!").execute(victim);
         }
+    }
+
+    private void handleKillerStreak(Player killer) {
+        final int killerStreaks = getDataConfig().getData(killer, PlayerDataType.STREAKS, 0);
+        final int killerLives = getDataConfig().getData(killer, PlayerDataType.LIVES, 0);
 
         if (!PluginFacade.getPlayersInLivesMode().contains(killer.getUniqueId())) {
-            if (killerStreaks >= 0) {
-                new PlayerKillStreakEvent(killer, killerStreaks + 1, KillStreakStatus.ACHIEVED).callEvent();
-                addData(killer, PlayerDataType.STREAKS, 1);
-                new PlayerActionBar("&2&l+ 1 Streak!").execute(killer);
-                
-            }
+            new PlayerKillStreakEvent(killer, killerStreaks + 1, KillStreakStatus.ACHIEVED).callEvent();
+            getDataConfig().addData(killer, PlayerDataType.STREAKS, 1);
+            new PlayerActionBar("&2&l+ 1 Streak!").execute(killer);
         } else {
-            if (killerLives + 1 > 5) {
-                getPluginFacade().removePlayerFromLivesMode(killer);
-                setData(killer, PlayerDataType.LIVES, 5);
-                new PlayerActionBar("&1Wooosh you had left lives mode !").execute(killer);
-                
-            } else {
-                new PlayerLivesEvent(killer, killerLives + 1, LivesStatus.ACHIEVED).callEvent();
-                addData(killer, PlayerDataType.LIVES, 1);
-                new PlayerActionBar("&d&l+ 1 Live!").execute(killer);
-                
+            if (killerLives >= 5) {
+                pluginFacade.removePlayerFromLivesMode(killer);
+                getDataConfig().setData(killer, PlayerDataType.LIVES, 5);
+                new PlayerActionBar("&1Wooosh you had left lives mode!").execute(killer);
+                return;
             }
+            new PlayerLivesEvent(killer, killerLives + 1, LivesStatus.ACHIEVED).callEvent();
+            getDataConfig().addData(killer, PlayerDataType.LIVES, 1);
+            new PlayerActionBar("&d&l+ 1 Live!").execute(killer);
         }
-
     }
 
-    private int getLives(Player player) {
-        return getDataConfig().getData(player, PlayerDataType.LIVES, 5);
+    private void dropKillMark(Player player, int streaks) {
+        int toDrop = Math.max(1, streaks / 4);
+        player.getWorld().dropItemNaturally(player.getEyeLocation(),
+                new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
+                        .setAmount(toDrop)
+                        .setDisplayName("&4Kill Mark")
+                        .setLore("&7A mark of death, infused",
+                                "&7with dark energy.",
+                                "&cCannot be used while",
+                                "&cyou are in the lives system!")
+                        .build());
     }
 
-    private int getStreaks(Player player) {
-        return getDataConfig().getData(player, PlayerDataType.STREAKS, 0);
-    }
-
-    private void setData(Player player, PlayerDataType type, int amount) {
-        this.getDataConfig().setData(player, type, amount);
-    }
-
-    private void removeData(Player player, PlayerDataType type, int amount) {
-        this.getDataConfig().removeData(player, type, amount);
-    }
-
-    private void addData(Player player, PlayerDataType type, int amount) {
-        this.getDataConfig().addData(player, type, amount);
-    }
 }

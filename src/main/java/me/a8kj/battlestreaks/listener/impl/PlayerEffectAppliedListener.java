@@ -12,7 +12,7 @@ public class PlayerEffectAppliedListener extends PluginListener {
 
     public PlayerEffectAppliedListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
-        this.register();
+        
     }
 
     @EventHandler

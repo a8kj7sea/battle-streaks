@@ -2,6 +2,7 @@ package me.a8kj.battlestreaks.listener.impl;
 
 import java.util.Optional;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -17,7 +18,7 @@ public class PlayerRespawnListener extends PluginListener {
 
     public PlayerRespawnListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
-        this.register();
+
     }
 
     @EventHandler
@@ -31,11 +32,13 @@ public class PlayerRespawnListener extends PluginListener {
                 }
             } else {
                 int lives = getDataConfig().getData(event.getPlayer(), PlayerDataType.LIVES, 0);
-                Optional<NegativeEffect> effect = getEffectManager().getEffectMap().values().stream()
-                        .filter(e -> e.getRequiredLives() == lives)
-                        .findFirst();
-
-                effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e).callEvent());
+                Bukkit.getScheduler().runTask(getPluginFacade().getPlugin(), () -> {
+                    removePlayerEffects(event.getPlayer());
+                    Optional<NegativeEffect> effect = getEffectManager().getEffectMap().values().stream()
+                            .filter(e -> e.getRequiredLives() == lives)
+                            .findFirst();
+                    effect.ifPresent(e -> new PlayerEffectAppliedEvent(event.getPlayer(), e).callEvent());
+                });
             }
         }
     }
