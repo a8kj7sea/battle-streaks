@@ -77,7 +77,11 @@ public class PluginFacade {
     }
 
     public void onStop() {
-
+        defaultConfiguration.save();
+        dataConfiguration.save();
+        effectManager.clear();
+        playerAbilityManager = null;
+        playersInLivesMode.clear();
     }
 
     public void addPlayerToLivesMode(Player player) {

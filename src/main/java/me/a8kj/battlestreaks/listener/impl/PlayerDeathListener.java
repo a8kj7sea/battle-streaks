@@ -28,59 +28,89 @@ public class PlayerDeathListener extends PluginListener {
         Player victim = event.getEntity();
         Player killer = victim.getKiller();
 
-        if (victim == null || killer == null) return;
+        if (victim == null || killer == null)
+            return;
 
         int victimStreaks = getStreaks(victim);
         int victimLives = getLives(victim);
+        ///////////////////////////
         int killerStreaks = getStreaks(killer);
         int killerLives = getLives(killer);
 
-        if (!PluginFacade.getPlayersInLivesMode().contains(killer.getUniqueId())
-                && !PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
-
-            removeData(victim, PlayerDataType.STREAKS, 1);
-            addData(killer, PlayerDataType.STREAKS, 1);
-            new PlayerKillStreakEvent(killer, killerStreaks + 1, KillStreakStatus.ACHIEVED).callEvent();
-            new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
-
-            if (victimStreaks - 1 <= 0) {
-                new PlayerActionBar("enter-livesmode").execute(victim);
-                this.getPluginFacade().addPlayerToLivesMode(victim);
+        if (!PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
+            if (victimStreaks - 1 == 0 || victimStreaks == 0) {
+                getPluginFacade().addPlayerToLivesMode(victim);
                 setData(victim, PlayerDataType.STREAKS, 0);
                 setData(victim, PlayerDataType.LIVES, 5);
                 new PlayerLivesEvent(victim, 5, null).callEvent();
                 return;
-            }
-
-            if (PluginFacade.getPlayersInLivesMode().contains(killer.getUniqueId())) {
-                addData(killer, PlayerDataType.LIVES, 1);
-                new PlayerLivesEvent(killer, killerLives + 1, LivesStatus.ACHIEVED).callEvent();
-
-                if (killerLives + 1 > 5) {
-                    getPluginFacade().removePlayerFromLivesMode(killer);
-                    removePlayerEffects(killer);
-                    setData(killer, PlayerDataType.LIVES, 5);
-                    new PlayerActionBar("leave-livesmode").execute(killer);
+            } else {
+                int toDrop = Math.max(1, (int) Math.floor(victimStreaks / 4));
+                if (victimStreaks >= 4) {
+                    victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
+                            new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
+                                    .setAmount(toDrop)
+                                    .setDisplayName("&4Kill Mark")
+                                    .setLore("&7A mark of death, infused",
+                                            "&7with dark energy.",
+                                            "&cCannot be used while",
+                                            "&cyou are in the lives system!")
+                                    .build());
+                    new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
+                    removeData(victim, PlayerDataType.STREAKS, 1);
+                    new PlayerActionBar("&4&l- 1 Streak!").execute(victim);
+                    return;
+                } else {
+                    victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
+                            new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
+                                    .setAmount(toDrop)
+                                    .setDisplayName("&4Kill Mark")
+                                    .setLore("&7A mark of death, infused",
+                                            "&7with dark energy.",
+                                            "&cCannot be used while",
+                                            "&cyou are in the lives system!")
+                                    .build());
+                    new PlayerKillStreakEvent(victim, victimStreaks - 1, KillStreakStatus.LOST).callEvent();
+                    removeData(victim, PlayerDataType.STREAKS, 1);
+                    new PlayerActionBar("&4&l- 1 Streak!").execute(victim);
+                    return;
                 }
             }
-
-            if (PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
-                removeData(victim, PlayerDataType.LIVES, 1);
-                new PlayerLivesEvent(victim, victimLives - 1, LivesStatus.LOST).callEvent();
+        } else {
+            if (victimLives - 1 == 0 || victimLives == 0) {
+                new PlayerLivesEvent(victim, 0, null).callEvent();
+                setData(victim, PlayerDataType.LIVES, 0);
                 return;
             }
-
-            int toDrop = Math.max(1, (int) Math.floor(killerStreaks / 4));
-            victim.getWorld().dropItemNaturally(victim.getEyeLocation(),
-                    new ItemStackBuilder(Material.TOTEM_OF_UNDYING)
-                            .setAmount(toDrop)
-                            .setDisplayName("&4Kill Mark")
-                            .setLore("&7A mark of death, infused",
-                                    "&7with dark energy.",
-                                    "&cCannot be used while",
-                                    "&cyou are in the lives system!")
-                            .build());
+            if (victimLives <= 5) {
+                new PlayerLivesEvent(victim, victimLives - 1, LivesStatus.LOST).callEvent();
+                removeData(victim, PlayerDataType.LIVES, 1);
+                new PlayerActionBar("&f&l- 1 Live!").execute(victim);
+                return;
+            }
         }
+
+        if (!PluginFacade.getPlayersInLivesMode().contains(killer.getUniqueId())) {
+            if (killerStreaks >= 0) {
+                new PlayerKillStreakEvent(killer, killerStreaks + 1, KillStreakStatus.ACHIEVED).callEvent();
+                addData(killer, PlayerDataType.STREAKS, 1);
+                new PlayerActionBar("&2&l+ 1 Streak!").execute(killer);
+                return;
+            }
+        } else {
+            if (killerLives + 1 > 5) {
+                getPluginFacade().removePlayerFromLivesMode(killer);
+                setData(killer, PlayerDataType.LIVES, 5);
+                new PlayerActionBar("&1Wooosh you had left lives mode !").execute(killer);
+                return;
+            } else {
+                new PlayerLivesEvent(killer, killerLives + 1, LivesStatus.ACHIEVED).callEvent();
+                addData(killer, PlayerDataType.LIVES, 1);
+                new PlayerActionBar("&d&l+ 1 Live!").execute(killer);
+                return;
+            }
+        }
+
     }
 
     private int getLives(Player player) {
