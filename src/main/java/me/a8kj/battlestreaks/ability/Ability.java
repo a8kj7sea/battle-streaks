@@ -9,10 +9,14 @@ public interface Ability {
     void activate(Player player);
 
     void deactivate(Player player);
-    
+
     CooldownTime getCooldownTime();
 
     String getName();
 
     String getDescription();
+
+    int getMinStreaks();
+
+    int getMaxStreaks();
 }

@@ -32,10 +32,6 @@ public interface PlayerAbilityManager {
 
     void unRegisterAbility(Player player);
 
-    void saveAbilities(Player player);
-
-    void loadAbilities(Player player);
-
     Optional<AbilityBase> getAbility(Player player);
 
     Set<UUID> getPlayersWithAbilityByName(String name);

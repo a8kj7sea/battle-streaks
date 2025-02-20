@@ -1,13 +1,17 @@
 package me.a8kj.battlestreaks.manager;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.a8kj.battlestreaks.ability.AbilityBase;
 import me.a8kj.battlestreaks.ability.AbilityManager;
 import me.a8kj.battlestreaks.player.PlayerAbilityManager;
+import me.a8kj.battlestreaks.player.PlayerData;
+import me.a8kj.battlestreaks.player.properties.PlayerDataType;
+import me.a8kj.battlestreaks.plugin.PluginFacade;
+
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -15,9 +19,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Getter
 public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
     private final AbilityManager abilityManager;
     private final Map<UUID, String> playerAbilities = new HashMap<>();
+
+    private final PluginFacade pluginFacade;
 
     @Override
     public void activatePlayerAbility(Player player) {
@@ -55,12 +62,20 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
 
     @Override
     public void replaceAbility(Player player, String newAbility) {
+        if (hasAbility(player)) {
+            getAbility(player).ifPresent(e -> e.deactivate(player));
+            playerAbilities.remove(player.getUniqueId());
+        }
         playerAbilities.put(player.getUniqueId(), newAbility);
+        PlayerData playerData = (PlayerData) this.pluginFacade.getDataConfiguration();
+        playerData.setData(player, PlayerDataType.ABILITY, newAbility.toLowerCase());
     }
 
     @Override
     public void removeAbility(Player player) {
         playerAbilities.remove(player.getUniqueId());
+        PlayerData playerData = (PlayerData) this.pluginFacade.getDataConfiguration();
+        playerData.setData(player, PlayerDataType.ABILITY, "NONE");
     }
 
     @Override
@@ -91,16 +106,6 @@ public class PlayerAbilityManagerImpl implements PlayerAbilityManager {
     @Override
     public void unRegisterAbility(Player player) {
         removeAbility(player);
-    }
-
-    @Override
-    public void saveAbilities(Player player) {
-        // Implement persistence logic here (e.g., save to database or config)
-    }
-
-    @Override
-    public void loadAbilities(Player player) {
-        // Implement loading logic here (e.g., retrieve from database or config)
     }
 
     @Override

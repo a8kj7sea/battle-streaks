@@ -57,6 +57,8 @@ public class PlayerDeathListener extends PluginListener {
                                         "&cCannot be used while",
                                         "&cyou are in the lives system!")
                                 .build());
+
+                return;
             }
             if ((killerStreaks + 1) % 4 == 0 && killerStreaks + 1 < 4) {
                 int toDrop = (int) Math.floor(killerStreaks / 4);
@@ -69,6 +71,7 @@ public class PlayerDeathListener extends PluginListener {
                                         "&cCannot be used while",
                                         "&cyou are in the lives system!")
                                 .build());
+                return;
             }
         }
 
@@ -79,13 +82,16 @@ public class PlayerDeathListener extends PluginListener {
             this.getPluginFacade().addPlayerToLivesMode(victim);
             setData(victim, PlayerDataType.STREAKS, 0);
             setData(victim, PlayerDataType.LIVES, 5);
-            new PlayerLivesEvent(killer, 5, null).callEvent();
+            new PlayerLivesEvent(victim, 5, null).callEvent();
+
+            return;
         }
 
         // if victim in lives mode and lost 1 lives after death
         if (PluginFacade.getPlayersInLivesMode().contains(victim.getUniqueId())) {
             removeData(victim, PlayerDataType.LIVES, 1);
             new PlayerLivesEvent(victim, victimLives - 1, LivesStatus.LOST).callEvent();
+            return;
         }
 
         // if killer in lives mode and got one kill add lives

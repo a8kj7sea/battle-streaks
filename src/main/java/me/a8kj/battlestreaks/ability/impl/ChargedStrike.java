@@ -11,8 +11,10 @@ public class ChargedStrike extends AbilityBase {
 
     private final PluginFacade pluginFacade;
 
-    public ChargedStrike(String name, CooldownTime cooldownTime, PluginFacade pluginFacade) {
-        super(name, "Perform a charged attack every 30 seconds, increasing your damage output", cooldownTime);
+    public ChargedStrike(String name, CooldownTime cooldownTime, int maxStreaks, int minStreaks,
+            PluginFacade pluginFacade) {
+        super(name, "Perform a charged attack every 30 seconds, increasing your damage output", cooldownTime,
+                maxStreaks, minStreaks);
         this.pluginFacade = pluginFacade;
     }
 
@@ -25,6 +27,6 @@ public class ChargedStrike extends AbilityBase {
     @Override
     public void deactivate(Player player) {
         this.pluginFacade.getPlayerAbilityManager().removeAbility(player);
-        new PlayerActionBar("You have deactivated Charged Strike!").execute(player);
+        new PlayerActionBar("&4You have deactivated Charged Strike!").execute(player);
     }
 }

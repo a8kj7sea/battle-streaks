@@ -22,7 +22,9 @@ import me.a8kj.battlestreaks.command.ReloadConfigCommand;
 import me.a8kj.battlestreaks.configuration.Configuration;
 import me.a8kj.battlestreaks.configuration.impl.DataConfig;
 import me.a8kj.battlestreaks.configuration.impl.DefaultConfig;
+import me.a8kj.battlestreaks.cooldown.CooldownTime;
 import me.a8kj.battlestreaks.effect.NegativeEffectManager;
+import me.a8kj.battlestreaks.listener.impl.EntityDamageByEntityListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerActiveListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerConnectionListeners;
 import me.a8kj.battlestreaks.listener.impl.PlayerDeathListener;
@@ -55,7 +57,6 @@ public class PluginFacade {
     private final NegativeEffectManager effectManager = new NegativeEffectManagerImpl();
     private Configuration defaultConfiguration;
     private Configuration dataConfiguration;
-    
 
     @Getter
     private static Set<UUID> playersInLivesMode = Sets.newHashSet();
@@ -71,7 +72,7 @@ public class PluginFacade {
         registerListeners();
         registerCommands();
         registerAbilities();
-        playerAbilityManager = new PlayerAbilityManagerImpl(abilityManager);
+        playerAbilityManager = new PlayerAbilityManagerImpl(abilityManager, this);
         registerListeners();
     }
 
@@ -88,12 +89,17 @@ public class PluginFacade {
     }
 
     private void registerAbilities() {
-        this.abilityManager.registerAbility(new BlindingBurst());
-        this.abilityManager.registerAbility(new ChargedStrike());
-        this.abilityManager.registerAbility(new DashOfFury());
-        this.abilityManager.registerAbility(new EarthquakeSlam());
-        this.abilityManager.registerAbility(new RampageSurge());
-        this.abilityManager.registerAbility(new Thunderstrike());
+        this.abilityManager.registerAbility("blinding_burst",
+                new BlindingBurst("blinding_burst", new CooldownTime(0, 60), 999, 12));
+        this.abilityManager.registerAbility("charged_strike",
+                new ChargedStrike("charged_strike", new CooldownTime(0, 60), 5, 3, this));
+        this.abilityManager.registerAbility("dash", new DashOfFury("dash", new CooldownTime(0, 30), this, 3, 1));
+        this.abilityManager.registerAbility("earthquake_slam",
+                new EarthquakeSlam("earthquake_slam", new CooldownTime(0, 70), 7, 5, this));
+        this.abilityManager.registerAbility("rampage_surge",
+                new RampageSurge("rampage_surge", new CooldownTime(0, 50), this, 9, 7));
+        this.abilityManager.registerAbility("thunderstrike",
+                new Thunderstrike("thunderstrike", new CooldownTime(0, 200), 12, 9));
     }
 
     private void registerCommands() {
@@ -110,6 +116,7 @@ public class PluginFacade {
         new PlayerMoveListener(this);
         new PlayerRespawnListener(this);
         new PlayerDeathListener(this);
+        new EntityDamageByEntityListener(this);
     }
 
     private void registerRecipeListeners() {

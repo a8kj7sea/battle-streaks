@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
 import java.util.List;
@@ -19,10 +20,10 @@ public class Thunderstrike extends AbilityBase {
     private static final int STUN_DURATION = 60; // Duration of the slowness effect in ticks (3 seconds)
     private static final int NAUSEA_DURATION = 60; // Duration of the nausea effect in ticks (3 seconds)
 
-    public Thunderstrike(String name, CooldownTime cooldownTime) {
+    public Thunderstrike(String name, CooldownTime cooldownTime, int maxStreaks, int minStreaks) {
         super(name,
                 "Summon a lightning bolt every 200 seconds, dealing 3 hearts of true damage and stunning all players within a 20-block radius.",
-                cooldownTime);
+                cooldownTime, maxStreaks, minStreaks);
     }
 
     @Override
@@ -56,12 +57,11 @@ public class Thunderstrike extends AbilityBase {
             if (entity instanceof Player && entity != player) {
                 Player targetPlayer = (Player) entity;
                 Vector direction = targetPlayer.getLocation().subtract(location).toVector().normalize();
-                targetPlayer.setVelocity(direction.multiply(-1).setY(0.5)); // Knockback upwards
+                targetPlayer.setVelocity(direction.multiply(-2.4).setY(0.5)); // Knockback upwards
             }
         }
 
-        // Optional notification to the player
-        player.sendMessage("You summoned a Thunderstrike!");
+        new PlayerActionBar("&1You summoned a Thunderstrike!").execute(player);
     }
 
     @Override

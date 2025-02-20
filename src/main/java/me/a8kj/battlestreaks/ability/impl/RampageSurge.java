@@ -6,6 +6,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import lombok.Getter;
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 
@@ -14,8 +15,10 @@ public class RampageSurge extends AbilityBase {
 
     private final PluginFacade pluginFacade;
 
-    public RampageSurge(String name, CooldownTime cooldownTime, PluginFacade pluginFacade) {
-        super(name, "Boost your strength and speed while healing 3 hearts instantly.", cooldownTime);
+    public RampageSurge(String name, CooldownTime cooldownTime, PluginFacade pluginFacade, int maxStreaks,
+            int minStreaks) {
+        super(name, "Boost your strength and speed while healing 3 hearts instantly.", cooldownTime, maxStreaks,
+                minStreaks);
         this.pluginFacade = pluginFacade;
     }
 
@@ -32,7 +35,7 @@ public class RampageSurge extends AbilityBase {
         // Apply Speed effect
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 200, 1)); // 10 seconds (200 ticks) of Speed II
 
-        player.sendMessage("You are in Rampage Surge!"); // Optional notification
+        new PlayerActionBar("&2You are in Rampage Surge!").execute(player);
     }
 
     @Override
@@ -40,6 +43,6 @@ public class RampageSurge extends AbilityBase {
         // Remove potion effects
         player.removePotionEffect(PotionEffectType.STRENGTH);
         player.removePotionEffect(PotionEffectType.SPEED);
-        player.sendMessage("Rampage Surge has been deactivated."); // Optional notification
+        new PlayerActionBar("&cRampage Surge has been deactivated").execute(player);
     }
 }

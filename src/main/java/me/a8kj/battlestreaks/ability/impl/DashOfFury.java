@@ -19,8 +19,8 @@ public class DashOfFury extends AbilityBase {
     private final PluginFacade plugin;
     private BukkitTask bukkitTask;
 
-    public DashOfFury(String name, CooldownTime cooldownTime, PluginFacade plugin) {
-        super(name, "Dash forward every 30 seconds, giving you a burst of speed", cooldownTime);
+    public DashOfFury(String name, CooldownTime cooldownTime, PluginFacade plugin, int minStreaks, int maxStreaks) {
+        super(name, "Dash forward every 30 seconds, giving you a burst of speed", cooldownTime, maxStreaks, minStreaks);
         this.plugin = plugin;
     }
 
@@ -28,9 +28,9 @@ public class DashOfFury extends AbilityBase {
     public void activate(Player player) {
         // Dash forward
         Vector direction = player.getLocation().getDirection().normalize();
-        double dashSpeed = 1.5; // Adjust speed as needed
-        player.setVelocity(direction.multiply(dashSpeed));
-        new PlayerActionBar("&bDASH!!!!!!!!!!").execute(player);
+        double dashSpeed = 1.7; // Adjust speed as needed
+        player.setVelocity(direction.multiply(dashSpeed).setY(0.5)); // Add a slight upward velocity
+
         // Play dash sound
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 1.0f, 1.2f);
 
@@ -54,6 +54,8 @@ public class DashOfFury extends AbilityBase {
                 ticks++;
             }
         }.runTaskTimer(plugin.getPlugin(), 0, 1);
+
+        new PlayerActionBar("&bDASH!!!!!!!!!!").execute(player);
     }
 
     @Override

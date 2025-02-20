@@ -11,5 +11,6 @@ public abstract class AbilityBase implements Ability {
     private final String name;
     private final String description;
     private final CooldownTime cooldownTime;
+    private final int maxStreaks, minStreaks;
 
 }

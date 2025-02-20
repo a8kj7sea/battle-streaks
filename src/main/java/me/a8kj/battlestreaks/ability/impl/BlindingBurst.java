@@ -10,18 +10,20 @@ import org.bukkit.Sound;
 import org.bukkit.util.Vector;
 
 import me.a8kj.battlestreaks.ability.AbilityBase;
+import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
 
 import java.util.List;
 
 public class BlindingBurst extends AbilityBase {
 
+    public BlindingBurst(String name, CooldownTime cooldownTime, int maxStreaks, int minStreaks) {
+        super(name, "Unleash an AoE explosion that blinds all nearby enemies every 60 seconds.", cooldownTime,
+                maxStreaks, minStreaks);
+    }
+
     private static final double RADIUS = 10.0; // Radius of the AoE effect
     private static final int STUN_DURATION = 60; // Duration of the blindness effect in ticks (3 seconds)
-
-    public BlindingBurst(String name, CooldownTime cooldownTime) {
-        super(name, "Unleash an AoE explosion that blinds all nearby enemies every 60 seconds.", cooldownTime);
-    }
 
     @Override
     public void activate(Player player) {
@@ -38,7 +40,10 @@ public class BlindingBurst extends AbilityBase {
                 LivingEntity livingEntity = (LivingEntity) entity;
 
                 // Apply blindness effect
-                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, STUN_DURATION, 0)); // 3 seconds of blindness
+                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, STUN_DURATION, 0)); // 3
+                                                                                                              // seconds
+                                                                                                              // of
+                                                                                                              // blindness
             }
         }
 
@@ -52,7 +57,7 @@ public class BlindingBurst extends AbilityBase {
         }
 
         // Optional notification to the player
-        player.sendMessage("You unleashed a Blinding Burst!");
+        new PlayerActionBar("&eYou unleashed a Blinding Burst!").execute(player);
     }
 
     @Override

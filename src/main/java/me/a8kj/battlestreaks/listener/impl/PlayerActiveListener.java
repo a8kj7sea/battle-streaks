@@ -26,7 +26,6 @@ public class PlayerActiveListener extends PluginListener {
         Player player = event.getPlayer();
 
         if (!getPlayerAbilityManager().hasAbility(player)) {
-            player.sendMessage("[debug] You don't have an ability!");
             return;
         }
 
@@ -49,6 +48,5 @@ public class PlayerActiveListener extends PluginListener {
         CooldownTime cooldownTime = ability.getCooldownTime();
         abilitiesCooldown.start(player.getUniqueId(), abilityName, cooldownTime.getMinutes(),
                 cooldownTime.getSeconds());
-        new PlayerActionBar("&6Your ability has been enabled!").execute(player);
     }
 }

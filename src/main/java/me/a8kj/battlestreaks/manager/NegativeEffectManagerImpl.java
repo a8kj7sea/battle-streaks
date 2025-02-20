@@ -24,6 +24,9 @@ public class NegativeEffectManagerImpl implements NegativeEffectManager {
 
     @Override
     public void applyNegativeEffect(Player player, String effectName) {
+        if (players.containsKey(player.getUniqueId())) {
+            players.remove(player.getUniqueId());
+        }
         NegativeEffect effect = effectMap.get(effectName.toLowerCase());
         if (effect != null) {
             effect.apply(player);
