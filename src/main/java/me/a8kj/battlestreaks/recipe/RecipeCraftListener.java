@@ -32,7 +32,7 @@ public abstract class RecipeCraftListener extends PluginListener {
         return null;
     }
 
-    public enum ApprovalStatus {
+    protected enum ApprovalStatus {
         ACCEPTED, DENIED
     }
 

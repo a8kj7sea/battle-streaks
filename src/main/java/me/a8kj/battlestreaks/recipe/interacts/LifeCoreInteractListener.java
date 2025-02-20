@@ -8,6 +8,8 @@ import org.bukkit.inventory.ItemStack;
 
 import lombok.NonNull;
 import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
+import me.a8kj.battlestreaks.api.player.impl.PlayerLivesEvent;
+import me.a8kj.battlestreaks.api.player.impl.PlayerLivesEvent.LivesStatus;
 import me.a8kj.battlestreaks.player.properties.PlayerDataType;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 import me.a8kj.battlestreaks.recipe.CustomInteractListener;
@@ -28,7 +30,6 @@ public class LifeCoreInteractListener extends CustomInteractListener {
 
     @Override
     public boolean canExecute(PlayerInteractEvent event, Player player) {
-
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (!PluginFacade.getPlayersInLivesMode().contains(player.getUniqueId())) {
                 player.sendMessage("\u00a7cYou cannot use it in streaks mode !");
@@ -36,32 +37,25 @@ public class LifeCoreInteractListener extends CustomInteractListener {
             }
             return true;
         }
-
         return false;
-
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void execute(PlayerInteractEvent event, Player player) {
-        // Add kill streak
         getDataConfig().addData(player, PlayerDataType.LIVES, 1);
-
-        // Check if the player has enough Kill Marks to remove
+        
         ItemStack killMarkItem = event.getItem();
         if (killMarkItem != null && killMarkItem.getAmount() > 0) {
-            // Reduce the amount of Kill Marks by 1
             int newAmount = killMarkItem.getAmount() - 1;
-            killMarkItem.setAmount(newAmount > 0 ? newAmount : 0); // Make sure the amount doesn't go negative
+            killMarkItem.setAmount(newAmount > 0 ? newAmount : 0);
             if (newAmount == 0) {
                 player.setItemInHand(new ItemStack(Material.AIR));
             }
-            // Update the player's inventory
             player.updateInventory();
-
-            // Remove 1 Kill Mark from the player's data
+            new PlayerLivesEvent(player, getDataConfig().getData(player, PlayerDataType.LIVES, 1), LivesStatus.ACHIEVED)
+                    .callEvent();
             getDataConfig().removeData(player, PlayerDataType.KILL_MARKS, 1);
-
             new PlayerActionBar("&e+1 Lives!").execute(player);
         }
     }

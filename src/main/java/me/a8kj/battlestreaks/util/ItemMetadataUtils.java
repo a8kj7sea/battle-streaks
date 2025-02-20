@@ -8,7 +8,7 @@ import org.bukkit.NamespacedKey;
 
 public class ItemMetadataUtils {
 
-    public static boolean hasMetadata(ItemStack item, String key, Plugin plugin) {
+    public static boolean hasMetadataString(ItemStack item, String key, Plugin plugin) {
         if (item == null || !item.hasItemMeta()) {
             return false;
         }
@@ -17,6 +17,20 @@ public class ItemMetadataUtils {
         if (meta != null) {
             NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
             return meta.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING);
+        }
+
+        return false;
+    }
+
+    public static boolean hasMetadata(ItemStack item, String key, Plugin plugin) {
+        if (item == null || !item.hasItemMeta()) {
+            return false;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+            return meta.getPersistentDataContainer().has(namespacedKey);
         }
 
         return false;

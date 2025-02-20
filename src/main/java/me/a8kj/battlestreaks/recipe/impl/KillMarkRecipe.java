@@ -26,7 +26,6 @@ public class KillMarkRecipe extends RecipeBase {
         @Override
         protected void preInit() {
 
-                setMetaData("name", name, plugin);
                 setPattern(
                                 "NGN", "BSB", "DTD");
         }

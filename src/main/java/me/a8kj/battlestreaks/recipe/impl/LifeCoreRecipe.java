@@ -19,7 +19,6 @@ public class LifeCoreRecipe extends RecipeBase {
                                                                 "&7Use it to restore your lost lives.")
                                                 .build(),
                                 plugin);
-
         }
 
         @Override
@@ -35,7 +34,7 @@ public class LifeCoreRecipe extends RecipeBase {
 
         @Override
         protected void preInit() {
-                setMetaData("name", name, plugin);
+                
 
                 setPattern("WGW",
                                 "BTB",

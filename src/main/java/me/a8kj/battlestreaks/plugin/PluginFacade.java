@@ -38,6 +38,7 @@ import me.a8kj.battlestreaks.manager.NegativeEffectManagerImpl;
 import me.a8kj.battlestreaks.manager.PlayerAbilityManagerImpl;
 import me.a8kj.battlestreaks.player.PlayerAbilityManager;
 import me.a8kj.battlestreaks.recipe.crafts.CraftKillMarkListener;
+import me.a8kj.battlestreaks.recipe.crafts.CraftLifeCoreListener;
 import me.a8kj.battlestreaks.recipe.crafts.CraftTotemFragmentListener;
 import me.a8kj.battlestreaks.recipe.impl.KillMarkRecipe;
 import me.a8kj.battlestreaks.recipe.impl.LifeCoreRecipe;
@@ -77,7 +78,7 @@ public class PluginFacade {
     }
 
     public void onStop() {
-       
+
     }
 
     public void addPlayerToLivesMode(Player player) {
@@ -120,9 +121,9 @@ public class PluginFacade {
     }
 
     private void registerRecipeListeners() {
-        new CraftKillMarkListener(this);
+        new CraftKillMarkListener(this).register();
         new CraftTotemFragmentListener(this);
-        new CraftKillMarkListener(this);
+        new CraftLifeCoreListener(this).register();
 
         new KillMarksInteractListener(this);
         new LifeCoreInteractListener(this);
@@ -131,7 +132,7 @@ public class PluginFacade {
     private void registerRecipes() {
         new LifeCoreRecipe(plugin).register();
         new KillMarkRecipe(plugin).register();
-        new TotemFragmentRecipe(plugin);
+        new TotemFragmentRecipe(plugin).register();
     }
 
     private void registerConfigurations() {

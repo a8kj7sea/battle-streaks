@@ -22,7 +22,6 @@ public class BattleStreaksPlugin extends JavaPlugin {
                 .sendMessage(ChatColor.GOLD + "⚔  " + ChatColor.RED + "Battle" + ChatColor.YELLOW + "Streaks "
                         + ChatColor.GREEN + "has been ENABLED! " + ChatColor.GRAY + "Made by " + ChatColor.AQUA
                         + "a8kj7eas");
-
     }
 
     @Override

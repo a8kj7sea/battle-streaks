@@ -8,6 +8,8 @@ import org.bukkit.inventory.ItemStack;
 
 import lombok.NonNull;
 import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
+import me.a8kj.battlestreaks.api.player.impl.PlayerKillStreakEvent;
+import me.a8kj.battlestreaks.api.player.impl.PlayerKillStreakEvent.KillStreakStatus;
 import me.a8kj.battlestreaks.player.properties.PlayerDataType;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 import me.a8kj.battlestreaks.recipe.CustomInteractListener;
@@ -45,22 +47,22 @@ public class KillMarksInteractListener extends CustomInteractListener {
     @SuppressWarnings("deprecation")
     @Override
     public void execute(PlayerInteractEvent event, Player player) {
-        // Add kill streak
+
         getDataConfig().addData(player, PlayerDataType.STREAKS, 1);
 
-        // Check if the player has enough Kill Marks to remove
         ItemStack killMarkItem = event.getItem();
         if (killMarkItem != null && killMarkItem.getAmount() > 0) {
-            // Reduce the amount of Kill Marks by 1
+
             int newAmount = killMarkItem.getAmount() - 1;
-            killMarkItem.setAmount(newAmount > 0 ? newAmount : 0); // Make sure the amount doesn't go negative
+            killMarkItem.setAmount(newAmount > 0 ? newAmount : 0);
             if (newAmount == 0) {
                 player.setItemInHand(new ItemStack(Material.AIR));
             }
-            // Update the player's inventory
-            player.updateInventory();
 
-            // Remove 1 Kill Mark from the player's data
+            player.updateInventory();
+            new PlayerKillStreakEvent(player, getDataConfig().getData(player, PlayerDataType.STREAKS, 1),
+                    KillStreakStatus.ACHIEVED).callEvent();
+
             getDataConfig().removeData(player, PlayerDataType.KILL_MARKS, 1);
 
             new PlayerActionBar("&a+1 Kill streak!").execute(player);

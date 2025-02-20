@@ -19,7 +19,6 @@ public class TotemFragmentRecipe extends RecipeBase {
                                                                 "&7Used in powerful recipes.")
                                                 .build(),
                                 plugin);
-
         }
 
         @Override
@@ -32,7 +31,6 @@ public class TotemFragmentRecipe extends RecipeBase {
 
         @Override
         protected void preInit() {
-                setMetaData("name", name, plugin);
 
                 setPattern("GTG",
                                 "G G",
