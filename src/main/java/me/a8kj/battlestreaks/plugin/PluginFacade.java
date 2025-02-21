@@ -22,7 +22,6 @@ import me.a8kj.battlestreaks.command.ReloadConfigCommand;
 import me.a8kj.battlestreaks.configuration.Configuration;
 import me.a8kj.battlestreaks.configuration.impl.DataConfig;
 import me.a8kj.battlestreaks.configuration.impl.DefaultConfig;
-import me.a8kj.battlestreaks.cooldown.CooldownTime;
 import me.a8kj.battlestreaks.effect.NegativeEffectManager;
 import me.a8kj.battlestreaks.effect.impl.GlowingAndAllEffects;
 import me.a8kj.battlestreaks.effect.impl.JumpAndSlowFallEffect;
@@ -96,17 +95,75 @@ public class PluginFacade {
     }
 
     private void registerAbilities() {
-        this.abilityManager.registerAbility("blinding_burst",
-                new BlindingBurst("blinding_burst", new CooldownTime(0, 60), 999, 12));
-        this.abilityManager.registerAbility("charged_strike",
-                new ChargedStrike("charged_strike", new CooldownTime(0, 60), 6, 5, this));
-        this.abilityManager.registerAbility("dash", new DashOfFury("dash", new CooldownTime(0, 30), this, 1, 4));
-        this.abilityManager.registerAbility("earthquake_slam",
-                new EarthquakeSlam("earthquake_slam", new CooldownTime(0, 70), 7, 5, this));
-        this.abilityManager.registerAbility("rampage_surge",
-                new RampageSurge("rampage_surge", new CooldownTime(0, 50), this, 9, 7));
-        this.abilityManager.registerAbility("thunderstrike",
-                new Thunderstrike("thunderstrike", new CooldownTime(0, 200), 12, 9));
+        DefaultConfig defaultConfig = (DefaultConfig) this.getDataConfiguration();
+        String[] abilities = {
+                "dash",
+                "charged_strike",
+                "blinding_burst",
+                "rampage_surge",
+                "earthquake_slam",
+                "thunderstrike"
+        };
+
+        for (String ability : abilities) {
+            if (!defaultConfig.isAbilityEnabled(ability)) {
+                continue;
+            }
+
+            switch (ability) {
+                case "blinding_burst":
+                    this.abilityManager.registerAbility("blinding_burst",
+                            new BlindingBurst("blinding_burst",
+                                    defaultConfig.getAbilityCooldownTime("blinding_burst"),
+                                    defaultConfig.getAbilityMaxStreaks("blinding_burst"),
+                                    defaultConfig.getAbilityMinStreaks("blinding_burst")));
+                    break;
+
+                case "charged_strike":
+                    this.abilityManager.registerAbility("charged_strike",
+                            new ChargedStrike("charged_strike",
+                                    defaultConfig.getAbilityCooldownTime("charged_strike"),
+                                    defaultConfig.getAbilityMaxStreaks("charged_strike"),
+                                    defaultConfig.getAbilityMinStreaks("charged_strike"),
+                                    this));
+                    break;
+
+                case "dash":
+                    this.abilityManager.registerAbility("dash",
+                            new DashOfFury("dash",
+                                    defaultConfig.getAbilityCooldownTime("dash"),
+                                    this,
+                                    defaultConfig.getAbilityMinStreaks("dash"),
+                                    defaultConfig.getAbilityMaxStreaks("dash")));
+                    break;
+
+                case "earthquake_slam":
+                    this.abilityManager.registerAbility("earthquake_slam",
+                            new EarthquakeSlam("earthquake_slam",
+                                    defaultConfig.getAbilityCooldownTime("earthquake_slam"),
+                                    defaultConfig.getAbilityMaxStreaks("earthquake_slam"),
+                                    defaultConfig.getAbilityMinStreaks("earthquake_slam"),
+                                    this));
+                    break;
+
+                case "rampage_surge":
+                    this.abilityManager.registerAbility("rampage_surge",
+                            new RampageSurge("rampage_surge",
+                                    defaultConfig.getAbilityCooldownTime("rampage_surge"),
+                                    this,
+                                    defaultConfig.getAbilityMaxStreaks("rampage_surge"),
+                                    defaultConfig.getAbilityMinStreaks("rampage_surge")));
+                    break;
+
+                case "thunderstrike":
+                    this.abilityManager.registerAbility("thunderstrike",
+                            new Thunderstrike("thunderstrike",
+                                    defaultConfig.getAbilityCooldownTime("thunderstrike"),
+                                    defaultConfig.getAbilityMaxStreaks("thunderstrike"),
+                                    defaultConfig.getAbilityMinStreaks("thunderstrike")));
+                    break;
+            }
+        }
     }
 
     private void registerNegativeEffects() {
@@ -138,8 +195,8 @@ public class PluginFacade {
                                 new GlowingAndAllEffects(requiredLives, effectName));
                         break;
                     default:
-                        System.out.println("Effect not recognized: " + effectName);
-                        break;
+                        throw new IllegalArgumentException("Effect name not found!");
+
                 }
             }
         }

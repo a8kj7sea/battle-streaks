@@ -14,46 +14,52 @@ effects:
   glowing_all:
     lives: 0
     enabled: true
-
+    
 abilities:
-  blinding_burst:
-    min-streaks: 12
-    max-streaks: 999
-    cooldown:
-      seconds: 60
-      minutes: 0
-
-  charged_strike:
-    min-streaks: 5
-    max-streaks: 6
-    cooldown:
-      seconds: 60
-      minutes: 0
-
   dash:
+    enabled: true
     min-streaks: 1
-    max-streaks: 4
+    max-streaks: 3
     cooldown:
       seconds: 30
       minutes: 0
 
-  earthquake_slam:
+  charged_strike:
+    enabled: true
+    min-streaks: 3
+    max-streaks: 5
+    cooldown:
+      seconds: 30
+      minutes: 0
+
+  blinding_burst:
+    enabled: true
     min-streaks: 5
     max-streaks: 7
+    cooldown:
+      seconds: 60
+      minutes: 0
+
+  rampage_surge:
+    enabled: true
+    min-streaks: 7
+    max-streaks: 9
+    cooldown:
+      seconds: 10
+      minutes: 0
+
+  earthquake_slam:
+    enabled: true
+    min-streaks: 9
+    max-streaks: 12
     cooldown:
       seconds: 70
       minutes: 0
 
-  rampage_surge:
-    min-streaks: 7
-    max-streaks: 9
-    cooldown:
-      seconds: 50
-      minutes: 0
-
   thunderstrike:
-    min-streaks: 9
-    max-streaks: 12
+    enabled: true
+    min-streaks: 12
+    max-streaks: 999
     cooldown:
       seconds: 200
       minutes: 0
