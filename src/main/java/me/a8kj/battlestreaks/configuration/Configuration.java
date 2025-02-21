@@ -2,9 +2,6 @@ package me.a8kj.battlestreaks.configuration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,10 +15,8 @@ public abstract class Configuration {
     private final File file;
     @Getter
     protected FileConfiguration configurationFile;
-    private final Logger logger;
-
     public Configuration(JavaPlugin plugin, String child, boolean saveDefaultData) {
-        this.logger = plugin.getLogger();
+        plugin.getLogger();
         if (!child.endsWith(".yml") && !child.endsWith(".yaml")) {
             child += ".yml";
         }

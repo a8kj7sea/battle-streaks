@@ -6,9 +6,12 @@ import lombok.NonNull;
 import me.a8kj.battlestreaks.ability.AbilityBase;
 import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
 import me.a8kj.battlestreaks.api.player.impl.PlayerAbilityActivateEvent;
+import me.a8kj.battlestreaks.api.player.impl.PlayerKillStreakEvent;
+import me.a8kj.battlestreaks.api.player.impl.PlayerKillStreakEvent.KillStreakStatus;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
 import me.a8kj.battlestreaks.listener.PluginListener;
 import me.a8kj.battlestreaks.manager.CooldownManager;
+import me.a8kj.battlestreaks.player.properties.PlayerDataType;
 import me.a8kj.battlestreaks.plugin.PluginFacade;
 import java.util.Optional;
 
@@ -18,15 +21,23 @@ public class PlayerActiveListener extends PluginListener {
 
     public PlayerActiveListener(@NonNull PluginFacade pluginFacade) {
         super(pluginFacade);
-        
+
     }
 
     @EventHandler
     public void onPlayerActiveHisAbility(PlayerAbilityActivateEvent event) {
         Player player = event.getPlayer();
 
+        if (PluginFacade.getPlayersInLivesMode().contains(player.getUniqueId()))
+            return;
+
+        if (getDataConfig().getData(player, PlayerDataType.STREAKS, 0) >= 1
+                && getPlayerAbilityManager().getAbility(player).isEmpty()) {
+            new PlayerKillStreakEvent(player, getDataConfig().getData(player, PlayerDataType.STREAKS, 0),
+                    KillStreakStatus.ACHIEVED).callEvent();
+        }
+
         if (!getPlayerAbilityManager().hasAbility(player)) {
-            player.sendMessage("no ability!");
             return;
         }
 

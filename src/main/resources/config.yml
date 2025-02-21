@@ -1,1 +1,59 @@
+effects:
+  slowness:
+    lives: 4
+    enabled: true
+  weakness:
+    lives: 3
+    enabled: true
+  mining_fatigue:
+    lives: 2
+    enabled: true
+  jump_slow_fall:
+    lives: 1
+    enabled: true
+  glowing_all:
+    lives: 0
+    enabled: true
 
+abilities:
+  blinding_burst:
+    min-streaks: 12
+    max-streaks: 999
+    cooldown:
+      seconds: 60
+      minutes: 0
+
+  charged_strike:
+    min-streaks: 5
+    max-streaks: 6
+    cooldown:
+      seconds: 60
+      minutes: 0
+
+  dash:
+    min-streaks: 1
+    max-streaks: 4
+    cooldown:
+      seconds: 30
+      minutes: 0
+
+  earthquake_slam:
+    min-streaks: 5
+    max-streaks: 7
+    cooldown:
+      seconds: 70
+      minutes: 0
+
+  rampage_surge:
+    min-streaks: 7
+    max-streaks: 9
+    cooldown:
+      seconds: 50
+      minutes: 0
+
+  thunderstrike:
+    min-streaks: 9
+    max-streaks: 12
+    cooldown:
+      seconds: 200
+      minutes: 0

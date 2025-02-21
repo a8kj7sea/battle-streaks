@@ -36,7 +36,7 @@ public class PlayerKillStreakListener extends PluginListener {
 
     private Optional<String> getAbilityNameByStreaks(int streaks) {
         return getAbilityManager().getAbilities().values().stream()
-                .filter(a -> streaks >= a.getMinStreaks() && streaks <= a.getMaxStreaks())
+                .filter(a -> streaks >= a.getMinStreaks() && streaks < a.getMaxStreaks())
                 .map(AbilityBase::getName)
                 .filter(name -> name != null && !name.isEmpty()) // Ensure name is valid
                 .findFirst();

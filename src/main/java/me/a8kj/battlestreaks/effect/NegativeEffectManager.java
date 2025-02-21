@@ -13,6 +13,10 @@ public interface NegativeEffectManager {
 
     void removePlayer(Player player);
 
+    void registerNegativeEffect(String name, NegativeEffect negativeEffect);
+
+    void unRegisterNegativeEffect(String name);
+
     void unApplyNegativeEffect(Player player, String effectName);
 
     void addNegativeEffect(String name, NegativeEffect effect);

@@ -24,6 +24,11 @@ import me.a8kj.battlestreaks.configuration.impl.DataConfig;
 import me.a8kj.battlestreaks.configuration.impl.DefaultConfig;
 import me.a8kj.battlestreaks.cooldown.CooldownTime;
 import me.a8kj.battlestreaks.effect.NegativeEffectManager;
+import me.a8kj.battlestreaks.effect.impl.GlowingAndAllEffects;
+import me.a8kj.battlestreaks.effect.impl.JumpAndSlowFallEffect;
+import me.a8kj.battlestreaks.effect.impl.MiningFatigueEffect;
+import me.a8kj.battlestreaks.effect.impl.SlownessEffect;
+import me.a8kj.battlestreaks.effect.impl.WeaknessEffect;
 import me.a8kj.battlestreaks.listener.impl.EntityDamageByEntityListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerActiveListener;
 import me.a8kj.battlestreaks.listener.impl.PlayerConnectionListeners;
@@ -75,6 +80,7 @@ public class PluginFacade {
         registerAbilities();
         playerAbilityManager = new PlayerAbilityManagerImpl(abilityManager, this);
         registerListeners();
+        registerNegativeEffects();
     }
 
     public void onStop() {
@@ -93,14 +99,50 @@ public class PluginFacade {
         this.abilityManager.registerAbility("blinding_burst",
                 new BlindingBurst("blinding_burst", new CooldownTime(0, 60), 999, 12));
         this.abilityManager.registerAbility("charged_strike",
-                new ChargedStrike("charged_strike", new CooldownTime(0, 60), 5, 3, this));
-        this.abilityManager.registerAbility("dash", new DashOfFury("dash", new CooldownTime(0, 30), this, 1, 3));
+                new ChargedStrike("charged_strike", new CooldownTime(0, 60), 6, 5, this));
+        this.abilityManager.registerAbility("dash", new DashOfFury("dash", new CooldownTime(0, 30), this, 1, 4));
         this.abilityManager.registerAbility("earthquake_slam",
                 new EarthquakeSlam("earthquake_slam", new CooldownTime(0, 70), 7, 5, this));
         this.abilityManager.registerAbility("rampage_surge",
                 new RampageSurge("rampage_surge", new CooldownTime(0, 50), this, 9, 7));
         this.abilityManager.registerAbility("thunderstrike",
                 new Thunderstrike("thunderstrike", new CooldownTime(0, 200), 12, 9));
+    }
+
+    private void registerNegativeEffects() {
+        DefaultConfig defaultConfig = (DefaultConfig) this.getDataConfiguration();
+        String[] effects = { "slowness", "weakness", "mining_fatigue", "jump_slow_fall", "glowing_all" };
+
+        for (String effectName : effects) {
+            if (defaultConfig.isEffectEnabled(effectName)) {
+                int requiredLives = defaultConfig.getRequiredLivesForEffect(effectName);
+                switch (effectName.toLowerCase()) {
+                    case "slowness":
+                        this.getEffectManager().registerNegativeEffect(effectName,
+                                new SlownessEffect(requiredLives, effectName));
+                        break;
+                    case "weakness":
+                        this.getEffectManager().registerNegativeEffect(effectName,
+                                new WeaknessEffect(requiredLives, effectName));
+                        break;
+                    case "mining_fatigue":
+                        this.getEffectManager().registerNegativeEffect(effectName,
+                                new MiningFatigueEffect(requiredLives, effectName));
+                        break;
+                    case "jump_slow_fall":
+                        this.getEffectManager().registerNegativeEffect(effectName,
+                                new JumpAndSlowFallEffect(requiredLives, effectName));
+                        break;
+                    case "glowing_all":
+                        this.getEffectManager().registerNegativeEffect(effectName,
+                                new GlowingAndAllEffects(requiredLives, effectName));
+                        break;
+                    default:
+                        System.out.println("Effect not recognized: " + effectName);
+                        break;
+                }
+            }
+        }
     }
 
     private void registerCommands() {
@@ -122,7 +164,7 @@ public class PluginFacade {
 
     private void registerRecipeListeners() {
         new CraftKillMarkListener(this).register();
-        new CraftTotemFragmentListener(this);
+        new CraftTotemFragmentListener(this).register();
         new CraftLifeCoreListener(this).register();
 
         new KillMarksInteractListener(this);

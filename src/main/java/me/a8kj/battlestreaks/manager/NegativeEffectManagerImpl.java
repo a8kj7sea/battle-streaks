@@ -2,7 +2,6 @@ package me.a8kj.battlestreaks.manager;
 
 import me.a8kj.battlestreaks.effect.NegativeEffect;
 import me.a8kj.battlestreaks.effect.NegativeEffectManager;
-import me.a8kj.battlestreaks.effect.impl.*;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -13,14 +12,6 @@ import java.util.UUID;
 public class NegativeEffectManagerImpl implements NegativeEffectManager {
     private final Map<String, NegativeEffect> effectMap = new HashMap<>();
     private final Map<UUID, NegativeEffect> players = new HashMap<>();
-
-    public NegativeEffectManagerImpl() {
-        effectMap.put("slowness", new SlownessEffect(4, "slowness"));
-        effectMap.put("weakness", new WeaknessEffect(3, "weakness"));
-        effectMap.put("mining_fatigue", new MiningFatigueEffect(2, "mining_fatigue"));
-        effectMap.put("jump_slow_fall", new JumpAndSlowFallEffect(1, "jump_slow_fall"));
-        effectMap.put("glowing_all", new GlowingAndAllEffects(0, "glowing_all"));
-    }
 
     @Override
     public void applyNegativeEffect(Player player, String effectName) {
@@ -85,4 +76,26 @@ public class NegativeEffectManagerImpl implements NegativeEffectManager {
         effectMap.clear();
         players.clear();
     }
+
+    @Override
+    public void registerNegativeEffect(String name, NegativeEffect negativeEffect) {
+        if (name == null || negativeEffect == null) {
+            throw new IllegalArgumentException("Name and NegativeEffect cannot be null");
+        }
+        effectMap.put(name.toLowerCase(), negativeEffect);
+    }
+
+    @Override
+    public void unRegisterNegativeEffect(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        effectMap.remove(name.toLowerCase());
+
+        players.entrySet().removeIf(entry -> {
+            NegativeEffect appliedEffect = entry.getValue();
+            return appliedEffect.getName().equalsIgnoreCase(name);
+        });
+    }
+
 }
