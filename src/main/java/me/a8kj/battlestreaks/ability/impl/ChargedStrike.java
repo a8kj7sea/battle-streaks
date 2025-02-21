@@ -20,13 +20,17 @@ public class ChargedStrike extends AbilityBase {
 
     @Override
     public void activate(Player player) {
+        // Register the ability and add the player to the charge attack set
         this.pluginFacade.getPlayerAbilityManager().registerAbility(player, "charged_strike");
+        this.pluginFacade.addPlayerToChargeAttack(player);
         new PlayerActionBar("&6You have activated Charged Strike!").execute(player);
     }
 
     @Override
     public void deactivate(Player player) {
+        // Remove the ability and the player from the charge attack set
         this.pluginFacade.getPlayerAbilityManager().removeAbility(player);
+        this.pluginFacade.removePlayerFromChargeAttack(player);
         new PlayerActionBar("&4You have deactivated Charged Strike!").execute(player);
     }
 }

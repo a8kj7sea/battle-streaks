@@ -62,7 +62,8 @@ public class PluginFacade {
     private final NegativeEffectManager effectManager = new NegativeEffectManagerImpl();
     private Configuration defaultConfiguration;
     private Configuration dataConfiguration;
-
+    @Getter
+    private final Set<UUID> playerInChargeAttack = Sets.newHashSet();
     @Getter
     private static Set<UUID> playersInLivesMode = Sets.newHashSet();
 
@@ -82,6 +83,14 @@ public class PluginFacade {
         registerNegativeEffects();
     }
 
+    public void addPlayerToChargeAttack(Player player) {
+        this.playerInChargeAttack.add(player.getUniqueId());
+    }
+
+    public void removePlayerFromChargeAttack(Player player) {
+        this.playerInChargeAttack.remove(player.getUniqueId());
+    }
+
     public void onStop() {
 
     }
@@ -95,7 +104,7 @@ public class PluginFacade {
     }
 
     private void registerAbilities() {
-        DefaultConfig defaultConfig = (DefaultConfig) this.getDataConfiguration();
+        DefaultConfig defaultConfig = (DefaultConfig) this.getDefaultConfiguration();
         String[] abilities = {
                 "dash",
                 "charged_strike",
@@ -167,7 +176,7 @@ public class PluginFacade {
     }
 
     private void registerNegativeEffects() {
-        DefaultConfig defaultConfig = (DefaultConfig) this.getDataConfiguration();
+        DefaultConfig defaultConfig = (DefaultConfig) this.getDefaultConfiguration();
         String[] effects = { "slowness", "weakness", "mining_fatigue", "jump_slow_fall", "glowing_all" };
 
         for (String effectName : effects) {
@@ -216,7 +225,8 @@ public class PluginFacade {
         new PlayerMoveListener(this).register();
         new PlayerRespawnListener(this).register();
         new PlayerEffectAppliedListener(this).register();
-        new EntityDamageByEntityListener(this).register();
+        new EntityDamageByEntityListener(this)
+                .register();
     }
 
     private void registerRecipeListeners() {

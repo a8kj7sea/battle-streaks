@@ -44,7 +44,7 @@ public class LifeCoreInteractListener extends CustomInteractListener {
     @Override
     public void execute(PlayerInteractEvent event, Player player) {
         getDataConfig().addData(player, PlayerDataType.LIVES, 1);
-        
+
         ItemStack killMarkItem = event.getItem();
         if (killMarkItem != null && killMarkItem.getAmount() > 0) {
             int newAmount = killMarkItem.getAmount() - 1;
@@ -53,10 +53,17 @@ public class LifeCoreInteractListener extends CustomInteractListener {
                 player.setItemInHand(new ItemStack(Material.AIR));
             }
             player.updateInventory();
-            new PlayerLivesEvent(player, getDataConfig().getData(player, PlayerDataType.LIVES, 1), LivesStatus.ACHIEVED)
-                    .callEvent();
+
             getDataConfig().removeData(player, PlayerDataType.KILL_MARKS, 1);
             new PlayerActionBar("&e+1 Lives!").execute(player);
+            if (getDataConfig().getData(player, PlayerDataType.LIVES, 1) >= 5) {
+                getPluginFacade().removePlayerFromLivesMode(player);
+                getDataConfig().setData(player, PlayerDataType.LIVES, 5);
+                new PlayerActionBar("&1Wooosh you had left lives mode!").execute(player);
+            }
+            new PlayerLivesEvent(player, getDataConfig().getData(player, PlayerDataType.LIVES, 1), LivesStatus.ACHIEVED)
+                    .callEvent();
+
         }
     }
 }

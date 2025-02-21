@@ -12,25 +12,25 @@ public class DefaultConfig extends Configuration {
     }
 
     public boolean isEffectEnabled(String name) {
-        if (getYamConfiguration().contains("effects." + name.toLowerCase()))
+        if (!getYamConfiguration().contains("effects." + name.toLowerCase()))
             return false;
         return getYamConfiguration().getBoolean("effects." + name.toLowerCase() + ".enabled");
     }
 
     public int getRequiredLivesForEffect(String name) {
-        if (getYamConfiguration().contains("effects." + name.toLowerCase()))
+        if (!getYamConfiguration().contains("effects." + name.toLowerCase()))
             return -1;
         return getYamConfiguration().getInt("effects." + name.toLowerCase() + ".lives");
     }
 
     public boolean isAbilityEnabled(String name) {
-        if (getYamConfiguration().contains("abilities." + name.toLowerCase()))
+        if (!getYamConfiguration().contains("abilities." + name.toLowerCase()))
             return false;
         return getYamConfiguration().getBoolean("abilities." + name.toLowerCase() + ".enabled");
     }
 
     public CooldownTime getAbilityCooldownTime(String name) {
-        if (getYamConfiguration().contains("abilities." + name.toLowerCase()))
+        if (!getYamConfiguration().contains("abilities." + name.toLowerCase()))
             return null;
         int minutes = getYamConfiguration().getInt("abilities." + name.toLowerCase() + ".cooldown.minutes");
         int seconds = getYamConfiguration().getInt("abilities." + name.toLowerCase() + ".cooldown.seconds");
@@ -39,15 +39,14 @@ public class DefaultConfig extends Configuration {
     }
 
     public int getAbilityMinStreaks(String name) {
-        if (getYamConfiguration().contains("abilities." + name.toLowerCase()))
+        if (!getYamConfiguration().contains("abilities." + name.toLowerCase()))
             return -1;
         return getYamConfiguration().getInt("abilities." + name.toLowerCase() + ".min-streaks");
     }
 
     public int getAbilityMaxStreaks(String name) {
-        if (getYamConfiguration().contains("abilities." + name.toLowerCase()))
+        if (!getYamConfiguration().contains("abilities." + name.toLowerCase()))
             return -1;
         return getYamConfiguration().getInt("abilities." + name.toLowerCase() + ".max-streaks");
     }
-
 }

@@ -21,7 +21,7 @@ public class BattleStreaksPlugin extends JavaPlugin {
         Bukkit.getConsoleSender()
                 .sendMessage(ChatColor.GOLD + "⚔  " + ChatColor.RED + "Battle" + ChatColor.YELLOW + "Streaks "
                         + ChatColor.GREEN + "has been ENABLED! " + ChatColor.GRAY + "Made by " + ChatColor.AQUA
-                        + "a8kj7eas");
+                        + "a8kj7sea");
     }
 
     @Override

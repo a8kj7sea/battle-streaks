@@ -2,6 +2,8 @@ package me.a8kj.battlestreaks.listener.impl;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import lombok.NonNull;
 import me.a8kj.battlestreaks.ability.AbilityBase;
 import me.a8kj.battlestreaks.action.impl.PlayerActionBar;
@@ -60,5 +62,17 @@ public class PlayerActiveListener extends PluginListener {
         CooldownTime cooldownTime = ability.getCooldownTime();
         abilitiesCooldown.start(player.getUniqueId(), abilityName, cooldownTime.getMinutes(),
                 cooldownTime.getSeconds());
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                // Only send the message if the player still has the ability they activated
+                Optional<AbilityBase> currentAbility = getPlayerAbilityManager().getAbility(player);
+                if (currentAbility.isPresent() && currentAbility.get().getName().equals(abilityName)) {
+                    new PlayerActionBar("&aYou can use your ability now!").execute(player);
+                }
+            }
+        }.runTaskLater(getPluginFacade().getPlugin(),
+                cooldownTime.getMinutes() * 20 * 60 + cooldownTime.getSeconds() * 20);
     }
 }
